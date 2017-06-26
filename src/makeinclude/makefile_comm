@@ -1,0 +1,85 @@
+#############################################################
+ #                                                           #
+ #                Makefile of common define                  #
+ #                Edit by hou 2014.09.23               #
+ #############################################################
+
+ CC               = gcc
+ CXX              = g++
+ AR               = ar
+
+ ###项目宏定义###
+ PATH_PROJECT    = /home/hou/projects/
+ PATH_SRC    = $(PATH_PROJECT)/src/
+ PATH_OBJ    = $(PATH_PROJECT)/objs/
+ PATH_LIB    = $(PATH_PROJECT)/lib/
+ PATH_BIN    = $(PATH_PROJECT)/bin
+
+ ### 64bit for OSVERSION_64###
+ OS_VERSION      = OSVERSION_64
+ ASYNOP          = NASYN_TRIGGER
+
+
+ ###编译标志###
+ ifeq ($(BUILD), DEBUG)
+ C_FLAGS          = -Wall -D_GNU_SOURCE -Wno-deprecated -fPIC -g -O0 -pipe -D_DEBUG -DDEBUG -D_LINUX -std=c99
+ CXX_FLAGS        = -Wall -D_GNU_SOURCE -Wno-deprecated -fPIC -g -O0 -pipe -D_DEBUG -DDEBUG  -Woverloaded-virtual  -std=c++11 -D_LINUX
+ endif
+
+ ifeq ($(BUILD), RELEASE)
+ C_FLAGS          = -Wall -D_GNU_SOURCE -Wno-deprecated -fPIC -g -O0 -pipe -DNDEBUG -D_LINUX -std=c99
+ CXX_FLAGS        = -Wall -D_GNU_SOURCE -Wno-deprecated -fPIC -g -O0 -pipe -DNDEBUG -Woverloaded-virtual -std=c++11 -D_LINUX
+ endif
+
+ ifeq ($(ASYNOP), ASYN_TRIGGER)
+ C_FLAGS += -DASYN_TRIGGER
+ CXX_FLAGS += -DASYN_TRIGGER
+ endif
+
+ C_SHARED = -shared
+
+ ###通用接口###
+ INC_INCLUDE      = -I$(PATH_SRC)/depslinux/
+
+ ###通用库###
+ INC_SYS          = -I/usr/local/include
+
+ INC_COMM         = -I$(PATH_SRC)/common/
+ LIB_COMM         = $(PATH_LIB)/libcomm.a
+
+ INC_MESSAGE      = -I$(PATH_SRC)/
+ LIB_MESSAGE      = $(PATH_LIB)/libmessage.a
+
+ INC_MATH3D       = -I$(PATH_SRC)/
+ LIB_MATH3D       = $(PATH_LIB)/libmath3d.a
+
+ INC_LIBEVENT     = -I$(PATH_SRC)//depslinux/libevent/include
+ LIB_LIBEVENT     = $(PATH_SRC)/depslinux/libevent-2.0.22-stable/libs/libevent.a
+
+ INC_LUA          = -I$(PATH_SRC)/depslinux//lua-5.1.5/src
+ LIB_LUA          = $(PATH_SRC)/depslinux//lua-5.1.5/src/liblua.a
+
+ INC_REDIS       = -I$(PATH_SRC)/depslinux/hiredis
+ LIB_REDIS       = $(PATH_LIB)/libhiredis.a
+
+ INC_PROTOBUF     = -I$(PATH_SRC)/depslinux/protobuf-3.2.0/src/google/protobuf
+ LIB_PROTOBUF     = $(PATH_SRC)/depslinux/protobuf-3.2.0/src/.libs/libprotobuf.a
+
+ INC_DETOUR       = -I$(PATH_SRC)/detourlinux/
+ LIB_DETOUR       = $(PATH_LIB)/libdetour.a
+
+ INC_MONGO       = -I$(PATH_SRC)//depslinux/mongo-cxx-driver-legacy-1.1.2/build/install/include
+ LIB_MONGO       = $(PATH_SRC)/depslinux/mongo-cxx-driver-legacy-1.1.2//build/install/lib/libmongoclient.a
+
+ LIB_BOOST       = $(PATH_SRC)/depslinux/boost_1_62_0/stage/lib/libboost_system.a
+ LIB_BOOST       += /usr/local/lib/libboost_thread.a
+ LIB_BOOST       += /usr/local/lib/libboost_regex.a
+
+
+
+ ###外部库###
+
+
+ ###
+ INC              = $(INC_INCLUDE) $(INC_XML) $(INC_JSON) $(INC_SYS) $(INC_COMM) $(INC_GAMECOMM) $(INC_REDIS)
+ LIB              = $(LIB_XML) $(LIB_JSON) $(LIB_COMM) $(LIB_GAMECOMM) -lpthread -lssl -lcrypto

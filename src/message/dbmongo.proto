@@ -1,0 +1,181 @@
+// 多服版本中提供mongodb读写的服务器
+
+
+// 为了更好维护和扩展，CURD的操作分成不同的message.
+// 同时数据不使用python pickle，而是使用BSON，以便将来dbmangager可以改成C++版本
+
+// 读取操作, 并没有设置全部的接口
+message	FindDocRequest {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bytes db = 2 ; // db name
+	required bytes collection = 3 ;	// collection name
+	required bytes query = 4; // bson 编码的query（或者spec）
+	optional bytes fields = 5; // bson编码的dict key 是"a", value是一个array, mongo的python driver不能直接encode array，只能encode dict like
+	optional int32 limit = 6  [default = 1];	//需要多少个结果返回
+	optional bool seqflag = 7 [default = false]; 	//该操作是否需要保证有序，即：相同的db和collection下，针对相同表项的的操作是FIFO的，该标记如果为True，则query中必须包含"_id"
+	optional bytes seq_key = 8; //seqflag操作的key, 指定除_id之外的seq_key
+	optional bytes sort = 9; // 排序
+	optional int32 read_pref = 10; //read_pref在开启复制集replica set的时候，表示选择查询节点的方式
+	optional bytes hint = 11;
+	optional bytes skip = 12;
+}
+
+message CountDocRequest {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bytes db = 2 ; // db name
+	required bytes collection = 3 ;	// collection name
+	optional bytes query = 4; // bson 编码的query（或者spec）
+}
+
+message	UpdateDocRequest {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bytes db = 2 ; // db name
+	required bytes collection = 3 ;	// collection name
+	required bytes query = 4; // bson 编码的query
+	required bytes fields = 5; // bson 编码的dict,用来更新
+	optional bool upsert = 6 [default = false]; // 如果不存在是否插入
+	optional bool multi = 7 [default = false]; // 是否更新多个
+	optional bool seqflag = 8 [default = false]; 	//该操作是否需要保证有序，即：相同的db和collection下，针对相同表项的的操作是FIFO的，该标记如果为True，则query中必须包含"_id"
+	optional bytes seq_key = 9; //seqflag操作的key, 指定除_id之外的seq_key
+}
+
+message	InsertDocRequest {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bytes db = 2 ; // db name
+	required bytes collection = 3 ;	// collection name
+	required bytes doc = 4; // bson 编码的dict,用来更新
+	optional bool seqflag = 5 [default = false]; 	//该操作是否需要保证有序，即：相同的db和collection下，针对相同表项的的操作是FIFO的，该标记如果为True，则query中必须包含"_id"
+	optional bytes seq_key = 6; //seqflag操作的key, 指定除_id之外的seq_key
+}
+
+message	DeleteDocRequest {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bytes db = 2 ; // db name
+	required bytes collection = 3 ;	// collection name
+	required bytes query = 4; // bson 编码的query
+	optional bool seqflag = 5 [default = false]; 	//该操作是否需要保证有序，即：相同的db和collection下，针对相同表项的的操作是FIFO的，该标记如果为True，则query中必须包含"_id"
+	optional bytes seq_key = 6; //seqflag操作的key, 指定除_id之外的seq_key
+}
+
+message	FindAndModifyDocRequest {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bytes db = 2 ; // db name
+	required bytes collection = 3 ;	// collection name
+	required bytes query = 4; // bson 编码的query（或者spec）
+	optional bytes fields = 5; // bson编码的dict key 是"a", value是一个array, mongo的python driver不能直接encode array，只能encode dict like
+	optional bytes update = 6; // bson编码的dict key 是"a", value是一个array, mongo的python driver不能直接encode array，只能encode dict like
+	optional bool upsert = 7 [default = false]; // 如果不存在是否插入
+	optional bool new = 8 [default = false];
+	optional bool seqflag = 9 [default = false]; 	//该操作是否需要保证有序，即：相同的db和collection下，针对相同表项的的操作是FIFO的，该标记如果为True，则query中必须包含"_id"
+	optional bytes seq_key = 10; //seqflag操作的key, 指定除_id之外的seq_key
+	optional bool remove = 11 [default = false]; // 是否remove找到的数据
+	optional bytes sort = 12; //选择按排序之后的第一个数据
+}
+
+message	RunProcedureRequest {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bytes db = 2 ; // db name
+	required bytes proc = 4; // procname
+	optional bytes args = 5; // bson编码的args 是"a", value是一个array, mongo的python driver不能直接encode array，只能encode dict like
+	optional bytes kwargs = 6; // bson编码的kwargs
+}
+
+message OperIndexRequest {
+	enum OperType {
+		ENSURE = 0;
+		DROP = 1;
+		RESET = 2;
+	}
+	optional int32 callback_id = 1 [default = -1];
+	required bytes db = 2;
+	required bytes collection = 3;
+	required OperType type = 4;
+	optional bytes query = 5;
+	optional bytes desc = 6;
+}
+
+message	CreateCollectionRequest {
+	optional int32 callback_id = 1 [default = -1];
+	required bytes db = 2 ;
+	required bytes collection = 4;
+	optional bytes operations = 5; // 新建collections的选项
+}
+
+message DbStatusMessage {
+	enum DbStatus {
+		CONNECTED = 0;	// DbManager和后台mongo连接一切正常
+		CONNECTION_FAILED = 1;	// DbManager和mongodb的连接失败了，严重错误
+		BUSY = 2;	// DbManager等待执行的操作队列过长了，retry或者减缓写
+	}
+	required DbStatus status = 1; // find操作成功是否成功
+}
+	
+message FindDocReply {
+	required int32 callback_id = 1 [default = -1]; // find操作成功之后的callbacl
+	required bool status = 2; // find操作成功是否成功
+	repeated bytes docs = 3; // bson 编码的doc列表
+}
+
+message CountDocReply {
+	required int32 callback_id = 1 [default = -1]; // find操作成功之后的callbacl
+	required bool status = 2; // find操作成功是否成功
+	required int32 count = 3; // bson 编码的doc列表
+}
+
+message UpdateDocReply {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bool status = 2; // find操作成功是否成功
+}
+
+message InsertDocReply {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bool status = 2; // insert操作成功是否成功
+	optional bytes insert_id = 3; //插入成功后返回的_id
+}
+
+message DeleteDocReply {
+	optional int32 callback_id = 1 [default = -1]; // 是否需要callback，需要则必须大于0
+	required bool status = 2; // delete操作成功是否成功
+}
+
+message FindAndModifyDocReply {
+	optional int32 callback_id = 1 [default = -1]; // find操作成功之后的callbacl
+	required bool status = 2; // find操作成功是否成功
+	optional bytes doc = 3; // bson 编码的doc列表
+}
+
+message RunProcedureReply {
+	optional int32 callback_id = 1 [default = -1]; // find操作成功之后的callbacl
+	required bool status = 2; // find操作成功是否成功
+	optional bytes doc = 3; // bson 编码的doc列表
+}
+
+message OperIndexReply {
+	optional int32 callback_id = 1 [default = -1];
+	required bool status = 2;
+}
+
+message CreateCollectionReply {
+	enum CrateCollectionStatus {
+		CREATE_SUCC = 0;	//建立成功
+		ALREADY_EXISTED = 1;//已经存在
+		CREATE_FAILED = 2;	//其它错误
+	}
+		
+	optional int32 callback_id = 1 [default = -1];
+	required CrateCollectionStatus status = 2;
+}
+
+message CallDBRequest
+{
+	required bytes method = 1; 
+	required bytes args = 2;
+	optional int32 callback_id = 3 [default = -1]; 
+}   
+
+message CallDBResponse
+{
+        required int32 callback_id = 1; 
+	required bytes args = 2;
+}
+

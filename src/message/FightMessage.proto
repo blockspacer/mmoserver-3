@@ -1,0 +1,16 @@
+
+message CS_CAST_SKILL {
+	// 谁发起的技能
+	required  bytes  entityid = 1;
+	// 第几个技能
+	required int32 slot_id = 2;
+	// 是否 选择某个敌人
+	optional bytes target_entity_id = 3;
+}
+
+message SC_CAST_SKILL {
+	required  bytes  entityid = 1;
+	required string animation_name = 2;
+}
+
+

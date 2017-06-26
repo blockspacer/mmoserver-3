@@ -1,0 +1,73 @@
+/////////////////////////////////////////////////////////////////////////
+
+enum SERVER_MESSAGE_OPCODE {
+	SERVER_OPCODE_AVATAR_CHANGER_GAME = 200;
+}
+
+
+// GATE_MESSAGE_OPCODE_REGISTE_GATE
+message GS_REGISTER_SERVER{
+	required int32   serverid = 1;
+    required int32   servertype = 2;
+	required bytes   ip = 3;
+	required int32   port = 4;
+};
+
+message SG_REGISTER_SERVICE {
+	required int32  servicetype = 1;
+	required int32  serverid = 2;
+};
+
+message GS_CLIENT_DISCONNECT {
+	required uint64  sessionid = 1;
+};
+
+message SG_KICK_CLIENT {
+	required uint64  sessionid = 1;
+};
+
+message ServerInfo {
+	required bytes  ip = 1; // server的ip
+	required int32  port = 2;  // server的端口
+	optional int32  sid = 3;  //serverid
+	optional bool banclient = 4;  //禁止玩家接入
+	optional int32 svrtype = 5;   //server 类型
+	optional int32 line_scene_type = 6;
+}
+
+// Game服务器的服务接入点信息
+message GameServerInfos {
+	repeated ServerInfo gameservers = 1 ;
+}
+
+// admin客户端需要game运行指定的script脚本
+message LUA_SCRIPT {
+	required bytes script_content = 1 ;		// 脚本的字符串
+	required int32 clientsock = 2;
+}
+
+message TestPing
+{
+	required uint64  time = 1;
+	required int32 serverid = 2;
+}
+
+message TestPingReply
+{
+	required uint64  time = 1;
+	required int32 serverid = 2;
+}
+
+message AvatarChangeGame
+{
+	required uint64 sessionid = 1;
+	required int32 gameid = 2;
+}
+
+message AvatarInfo
+{
+	required uint64 sessionid = 1;
+	required bytes avatarID = 2;
+	required int32 level = 3;
+	required int32 state = 4;
+}

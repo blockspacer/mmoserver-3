@@ -1,0 +1,177 @@
+/////////////////////////////////////////////////////////////////////////
+
+import "common.proto";
+
+
+// CLIENT_MESSAGE_LUA_MESSAGE = 1;								// 执行Lua请求
+message CS_Lua_RunRequest{
+    required uint32 opcode = 1; // 信息编号
+    // RPC调用的参数, 不强制如何序列化，可以用BSON, protobuf, msgpack或者其他
+    optional bytes parameters = 2;
+};
+
+// SERVER_MESSAGE_OPCODE_LUA_MESSAGE = 3;
+message SC_Lua_RunRequest{
+    required uint32 opcode = 1; // 信息编号
+    // RPC调用的参数, 不强制如何序列化，可以用BSON, protobuf, msgpack或者其他
+    optional bytes parameters = 2;
+};
+//////////////////////////////////////////////////////////////////////////
+message Position {
+	required  bytes  entityid = 1;
+	required float DestX = 2;
+	required float DestY = 3;
+	required float DestZ = 4;
+	required float Orientation = 5;
+	required float Speed = 6;	
+}
+
+// CLIENT_MESSAGE_OPCODE_MOVE = 4;
+message CS_CLIENT_MOVE {
+	required Position MyPostion = 1;
+	required uint64   clienttime = 2;
+	required uint32   SceneID = 5;
+}
+
+// SERVER_MESSAGE_OPCODE_MOVE = 5;
+message SC_MOVE_SYNC {
+	required Position SyncPostion = 1;
+	required uint64   servertime = 2;
+	required uint32   SceneID = 5;
+}
+
+// CLIENT_MESSAGE_OPCODE_STOP_MOVE = 6;
+message CS_STOP_MOVE {
+	// 包括个人和宠物的位置信息
+	required Position MyPostion = 1;
+	required uint64   clienttime = 2;
+	required uint32   SceneID = 3;
+}
+
+// SERVER_MESSAGE_OPCODE_STOP_MOVE = 7;
+message SC_STOP_MOVE_SYNC {
+	// 包括个人和宠物的位置信息
+	repeated Position SyncPostion = 1;
+	required uint64    servertime = 2;
+	required uint32   SceneID = 3;
+}
+
+// CLIENT_MESSAGE_FORCE_POSITION = 8;
+message CS_FORCE_MOVE {
+	required  bytes  entityid = 1;
+	required float DestX = 2;
+	required float DestY = 3;
+	required float DestZ = 4;
+	required uint32   SceneID = 5;
+}
+
+// SERVER_MESSAGE_FORCE_POSITION = 9;
+message SC_FORCE_MOVE {
+	required  bytes  entityid = 1;
+	required float DestX = 2;
+	required float DestY = 3;
+	required float DestZ = 4;
+	required uint32   SceneID = 5;
+}
+
+// CLIENT_MESSAGE_OPCODE_TURN_DIRECTION = 10;  // 转变方向
+message CS_TURN_DIRECTION {
+	required  bytes  entityid = 1;
+	required float DestX = 2;
+	required float DestY = 3;
+	required float DestZ = 4;
+	required float Direction = 5;
+	required uint32   SceneID = 6;	
+}
+
+// SERVER_MESSAGE_OPCODE_TURN_DIRECTION = 11;  // 转变方向
+message SC_TURN_DIRECTION {
+	required  bytes  entityid = 1;
+	required float DestX = 2;
+	required float DestY = 3;
+	required float DestZ = 4;
+	required float Direction = 5;
+	required uint32   SceneID = 6;	
+}
+
+
+// SERVER_MESSAGE_OPCODE_CREATE_ENTITY = 12; //通知创建entity
+message SC_CREATE_ENTITY {
+	message Entity {
+		required  bytes    EntityID =1;
+		required  bytes    EntityInfo =2;
+		required  Position EntityPos =3;
+	}
+	required uint32             SceneID = 1;   //当前场景ID
+	repeated Entity             EntitiesCreate = 2;   //进入视野的Entity
+}
+
+
+// SERVER_MESSAGE_OPCODE_DESTROY_ENTITY = 13; //通知销毁entity
+message SC_DESTROY_ENTITY {
+	required uint32             SceneID = 1;   //当前场景ID
+	repeated bytes              EntitiesDestroy = 2; //离开视野的Entity
+}
+
+
+message CS_PING {
+	required uint64 clienttime = 1;
+}
+
+message SC_PING_BACK {
+	required uint64 clienttime = 1;
+	required uint64 servertime = 2;
+}
+
+message CS_PING_BACK_BACK {
+	required uint64 clienttime = 1;
+	required uint64 servertime = 2;
+}
+
+message ConnectServerRequest {
+	enum RequestType {
+		NEW_CONNECTION = 0;	// 新登录
+		RE_CONNECTION = 1;	// 断线快速重连
+	}
+	required RequestType type = 1;  // 认证类型
+	required bytes  deviceid = 2;  // 设备 id, 标示客户端，可用mac地址
+	optional bytes  entityid = 3; 	// 断线重连的时候需要的avatar entity id
+	optional bytes  authmsg = 4; 	// 验证消息
+}
+
+// Client的连接服务器的信息
+message ConnectServerReply{
+	enum ReplyType {
+		BUSY = 0;	// 服务端忙，请重试
+		CONNECTED = 1;		// 初次连接成功
+		RECONNECT_SUCCEEDED = 2;  //断线重连成功
+		RECONNECT_FAILED = 3;		//断线快速重练失败，需重新登录
+		FORBIDDEN = 4;				//服务器禁止连接
+		MAX_CONNECTION = 5;			//Gate连接数达上限
+	}
+	required ReplyType type = 1;
+	optional bytes  extramsg = 2;	//要给客户端的额外信息
+}
+
+//////////////////////////////// 移动方案尝试 ///////////////////////////////////
+message CS_RUN_STATE_CHANGE{
+	required bytes entityid = 1;
+	required bool isrunning = 2;
+};
+message CS_ROTATE_CHANGE{
+	required bytes entityid = 1;
+	required float rotationY = 2;
+};
+message SC_RUN_STATE_CHANGE{
+	required bytes entityid = 1;
+	required bool isrunning = 2;
+};
+message SC_ROTATE_CHANGE{
+	required bytes entityid = 1;
+	required float rotationY = 2;
+};
+
+
+
+
+

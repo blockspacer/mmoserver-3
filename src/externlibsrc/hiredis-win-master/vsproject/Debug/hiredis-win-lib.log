@@ -1,0 +1,37 @@
+﻿  sds.c
+  net.c
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(95): warning C4133: “函数”: 从“int *”到“const char *”的类型不兼容
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(163): warning C4133: “函数”: 从“int *”到“const char *”的类型不兼容
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(265): warning C4133: “函数”: 从“int *”到“char *”的类型不兼容
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(303): warning C4133: “函数”: 从“unsigned long *”到“const char *”的类型不兼容
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(307): warning C4133: “函数”: 从“unsigned long *”到“const char *”的类型不兼容
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(378): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(1850): note: 参见“inet_addr”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(382): warning C4996: 'gethostbyname': Use getaddrinfo() or GetAddrInfoW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+  c:\program files (x86)\windows kits\8.1\include\um\winsock2.h(2238): note: 参见“gethostbyname”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(405): warning C4477: “sprintf_s”: 格式字符串“%s”需要类型“char *”的参数，但可变参数 1 拥有了类型“LPVOID”
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\net.c(428): warning C4477: “sprintf_s”: 格式字符串“%s”需要类型“char *”的参数，但可变参数 1 拥有了类型“LPVOID”
+  hiredis.c
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\hiredis.c(432): warning C4244: “=”: 从“__int64”转换到“long”，可能丢失数据
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\hiredis.c(487): warning C4244: “=”: 从“__int64”转换到“long”，可能丢失数据
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\hiredis.c(916): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 参见“sprintf”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\hiredis.c(923): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 参见“sprintf”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\hiredis.c(1002): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 参见“sprintf”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\hiredis.c(1009): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(1769): note: 参见“sprintf”的声明
+  dict.c
+  async.c
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\async.c(361): warning C4996: 'stricmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _stricmp. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(568): note: 参见“stricmp”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\async.c(584): warning C4996: 'strnicmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _strnicmp. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(579): note: 参见“strnicmp”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\async.c(599): warning C4996: 'strnicmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _strnicmp. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(579): note: 参见“strnicmp”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\async.c(611): warning C4996: 'strnicmp': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _strnicmp. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\string.h(579): note: 参见“strnicmp”的声明
+d:\ol\newserver\dependencies\hiredis-win-master\hiredis-win-master\async.c(663): warning C4090: “函数”: 不同的“const”限定符
+  正在生成代码...
+  hiredis-win-lib.vcxproj -> D:\OL\newserver\Debug\hiredis-win-lib.lib
