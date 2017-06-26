@@ -1,0 +1,3 @@
+[submodule "bin/luascript/Common"]
+	path = bin/luascript/Common
+	url = https://github.com/houontherun/common
