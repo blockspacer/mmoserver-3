@@ -2,7 +2,7 @@
 -- 文件名:	country_monster.lua
 -- 版  权:	(C) 华风软件
 -- 创建人:	Shangyz(nmdwgll@gmail.com)
--- 日  期:	2017/5/8 0008
+-- 日  期:	2017/5/8 0008 
 -- 描  述:	阵营boss 总boss 守卫npc 箭塔
 --------------------------------------------------------------------
 local timer = require "basic/timer"
