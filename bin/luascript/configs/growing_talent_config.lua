@@ -20,6 +20,8 @@ local talent_scheme
 local string_split = require("basic/scheme").string_split
 local tostring = tostring
 local string_format = string.format
+local PROPERTY_INDEX_TO_NAME = const.PROPERTY_INDEX_TO_NAME
+local tonumber = tonumber
 
 local function get_page_unlock_condition(page_index)
     local config = page_unlock_scheme[page_index]
@@ -52,7 +54,7 @@ local function get_talent_upgrade_consume(talent_id, slot_level)
     local delta_level = slot_level - detail_config.Lv_lower
     for i = 1, 2 do
         local key = string_format("Consume%dID", i)
-        local inc_key = "ConsumeIncrement1"..i
+        local inc_key = "ConsumeIncrement"..i
         local id = detail_config[key][1]
         local count = detail_config[key][2]
         count = count + delta_level * detail_config[inc_key]
@@ -62,14 +64,28 @@ local function get_talent_upgrade_consume(talent_id, slot_level)
     return consume
 end
 
+local function get_talent_level(exp_consumed)
+    local level = 0
+    for i, v in ipairs(levelup_exp_scheme) do
+        if exp_consumed >= v.NeedExp then
+            level = i
+        else
+            break
+        end
+    end
+    return level
+end
+
+
 local function reload()
     page_unlock_scheme = recreate_scheme_table_with_key(page_unlock_orignal, "TalentPage")
     levelup_exp_scheme = recreate_scheme_table_with_key(levelup_exp_orignal, "Lv")
+    talent_upgrade_scheme = {}
     for _, v in ipairs(talent_upgrade_orignal) do
         talent_upgrade_scheme[v.TalentSlotID] = talent_upgrade_scheme[v.TalentSlotID] or {}
         table.insert(talent_upgrade_scheme[v.TalentSlotID], v)
     end
-    talent_scheme = recreate_scheme_table_with_key(talent_orignal, "PostionID")
+    talent_scheme = {}
     for i, v in pairs(talent_orignal) do
         local new_v = table.copy(v)
         if new_v.LogicID == const.TALENT_TYPE.attrib_modify then
@@ -81,15 +97,16 @@ local function reload()
                     local param = string_split(v[key], "|")
                     if param[1] == "A" then
                         local addition = string_split(param[2], "=")
-                        new_v.base_addition[addition[1]] = addition[2]
+                        new_v.base_addition[PROPERTY_INDEX_TO_NAME[tonumber(addition[1])]] = tonumber(addition[2])
                     elseif param[1] == "B" then
                         local addition = string_split(param[2], "=")
-                        new_v.percent_addition[addition[1]] = addition[2]
+                        new_v.percent_addition[PROPERTY_INDEX_TO_NAME[tonumber(addition[1])]] = tonumber(addition[2])
                     else
                         flog("error", "growing_talent_scheme talent_scheme error type "..tostring(param[1]))
                     end
                 end
             end
+            talent_scheme[new_v.PostionID] = new_v
         end
     end
 end
@@ -100,4 +117,5 @@ return {
     get_page_unlock_condition = get_page_unlock_condition,
     get_talent_upgrade_consume = get_talent_upgrade_consume,
     talent_scheme = talent_scheme,
+    get_talent_level = get_talent_level,
 }

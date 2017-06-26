@@ -559,7 +559,7 @@ local function player_init_data()
     end
 end
 
-local function on_add_hp(monster_scene_id, hp_persent)
+local function on_add_hp(monster_scene_id, hp_percent)
     local monster_state = country_monster_list[monster_scene_id]
     if monster_state == nil then
         return const.error_country_monster_not_exist
@@ -568,7 +568,7 @@ local function on_add_hp(monster_scene_id, hp_persent)
         return const.error_country_monster_hp_is_full
     end
 
-    monster_state.hp = monster_state.hp + monster_state.max_hp * hp_persent / 10000
+    monster_state.hp = monster_state.hp + monster_state.max_hp * hp_percent / 10000
     if monster_state.hp > monster_state.max_hp then
         monster_state.hp = monster_state.max_hp
     end

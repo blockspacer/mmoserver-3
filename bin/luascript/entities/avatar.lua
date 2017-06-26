@@ -37,7 +37,7 @@ local parent_part_list = {
 local entity_part_list = {
    "imp_player", "imp_property", "imp_dungeon", "imp_assets", "imp_seal", "imp_equipment", "imp_store","imp_friend","imp_chat",
     "imp_skill","imp_aoi","imp_teamup","imp_arena", "imp_country","imp_pk","imp_mail","imp_red_points","imp_faction","imp_fight_server",
-    "imp_appearance","imp_task","imp_activity","imp_redis_rank","imp_gift_code","imp_country_war",
+    "imp_appearance","imp_task","imp_activity","imp_redis_rank","imp_gift_code","imp_country_war", "imp_talent",
 }
 
 local db_scheme = {}
@@ -434,6 +434,16 @@ function avatar.notice_fight_server_avatar_logout(self)
     if self.in_fight_server then
         self:send_to_fight_server(const.GD_MESSAGE_LUA_GAME_RPC,{func_name="on_notice_fight_avatar_logout"})
     end
+end
+
+function avatar:player_offline()
+    flog("tmlDebug","avatar:player_offline")
+    self.is_offline = true
+    local puppet = self:get_puppet()
+    if puppet ~= nil then
+        puppet:StopMove()
+    end
+    self:save_data()
 end
 
 entity_factory.register_entity(const.ENTITY_TYPE_PLAYER, avatar)

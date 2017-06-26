@@ -527,8 +527,7 @@ end
 function faction_player.on_query_faction_building(self,input)
     local result, building = faction_factory.on_query_faction_building(input.faction_id,input.building_id,input.actor_id)
     if building ~= nil then
-        building.coin_count = input.coin_count
-        building.fund_count = input.fund_count
+        building.investment_count = input.investment_count
     end
     send_to_client(self.session_id, const.SC_MESSAGE_LUA_GAME_RPC , {func_name="OnQueryFactionBuildingRet",result=result,building=building,building_id=input.building_id})
 end
@@ -538,13 +537,7 @@ function faction_player.on_investment_faction_building(self,input)
     if result ~= 0 then
         send_to_client(self.session_id, const.SC_MESSAGE_LUA_GAME_RPC , {func_name="OnInvestmentFactionBuildingRet",result=result,building_id=input.building_id})
     else
-        building.coin_count = input.coin_count
-        building.fund_count = input.fund_count
-        if input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.coin then
-            building.coin_count = building.coin_count + 1
-        elseif input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.fund then
-            building.fund_count = building.fund_count + 1
-        end
+        building.investment_count = input.investment_count
         send_to_client(self.session_id, const.SC_MESSAGE_LUA_GAME_RPC , {func_name="OnInvestmentFactionBuildingRet",result=result,building=building,building_id=input.building_id})
     end
     send_to_game(input.game_id,const.OG_MESSAGE_LUA_GAME_RPC,{building_id=input.building_id,investment_type=input.investment_type,func_name="on_investment_faction_building_ret",result=result,actor_id=input.actor_id})
@@ -553,8 +546,7 @@ end
 function faction_player.on_upgrade_faction_building(self,input)
     local result, building = faction_factory.on_upgrade_faction_building(input.faction_id,input.building_id,input.actor_id)
     if building ~= nil then
-        building.coin_count = input.coin_count
-        building.fund_count = input.fund_count
+        building.investment_count = input.investment_count
     end
     send_to_client(self.session_id, const.SC_MESSAGE_LUA_GAME_RPC , {func_name="OnUpgradeFactionBuildingRet",result=result,building=building,building_id=input.building_id})
 end

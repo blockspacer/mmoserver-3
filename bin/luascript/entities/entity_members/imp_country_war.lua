@@ -275,10 +275,10 @@ function imp_country_war.gm_start_country_war(self, last_time)
 end
 
 
-function imp_country_war.rpc_add_country_monster_hp(self, monster_scene_id, hp_persent, callback_table)
+function imp_country_war.rpc_add_country_monster_hp(self, monster_scene_id, hp_percent, callback_table)
     local output = {func_name = "on_add_hp" }
     output.monster_scene_id = monster_scene_id
-    output.hp_persent = hp_persent
+    output.hp_percent = hp_percent
     output.callback_table = callback_table
     output.actor_id = self.actor_id
     self:send_message_to_country_server(output)

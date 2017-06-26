@@ -18,4 +18,5 @@ return {
     n_hour = "%s小时",
     n_min = "%s分钟",
     n_sec = "%s秒",
+    position_str = "%d线%s(%3.2f, %3.2f)",
 }

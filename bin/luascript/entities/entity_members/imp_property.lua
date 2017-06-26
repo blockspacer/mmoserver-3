@@ -10,6 +10,7 @@ local flog = require "basic/log"
 local growing_actor = require "data/growing_actor"
 local common_fight_base = require "data/common_fight_base"
 local common_parameter_formula_config = require "configs/common_parameter_formula_config"
+local math_floor = math.floor
 
 local name_to_index = const.PROPERTY_NAME_TO_INDEX
 
@@ -159,7 +160,7 @@ function imp_property.imp_property_write_to_sync_dict(self, dict)
     if puppet then
         dict.spritual = puppet.spritual()
         flog("syzDebug", "self.spritual "..dict.spritual)
-        dict.spritual = math.floor(dict.spritual)
+        dict.spritual = math_floor(dict.spritual)
     end
 end
 
@@ -228,6 +229,21 @@ local function player_recalc(self)
         end
     end
 
+    --天赋加成
+    local base_addition, percent_addition = self:get_talent_attrib()
+    for i, v in pairs(base_addition) do
+        if self[i] ~= nil then
+            self[i] = self[i] + v
+        else
+            self[i] = v
+        end
+    end
+    for i, v in pairs(percent_addition) do
+        if self[i] ~= nil then
+            self[i] = math_floor(self[i] * (v + 10000) / 10000)
+        end
+    end
+
     local old_spritual = self.real_spritual
     self.real_spritual = self.spritual + self.spritual_total_addition + self.spritual_weekly_addition
     if old_spritual ~= self.real_spritual then
@@ -245,7 +261,7 @@ local function player_recalc(self)
     end
 
     -- 战斗力计算
-    local fight_power = math.floor(calculate_fight_power(self))
+    local fight_power = math_floor(calculate_fight_power(self))
     local fight_power_change = false
     if fight_power ~= self.fight_power then
         fight_power_change = true
@@ -282,11 +298,11 @@ local function player_recalc(self)
     local mp_change_percent
 
     if self.hp_max ~= old_hp_max and old_hp_max ~= 0 then
-        hp_change_percent = math.floor(100 * self.hp_max / old_hp_max)
+        hp_change_percent = math_floor(100 * self.hp_max / old_hp_max)
     end
 
     if self.mp_max ~= old_mp_max and old_mp_max ~= 0 then
-        mp_change_percent = math.floor(100 * self.mp_max / old_mp_max)
+        mp_change_percent = math_floor(100 * self.mp_max / old_mp_max)
     end
 
     --暂时判断类别，竞技场假人优化时可以去掉
@@ -336,13 +352,13 @@ local function pet_recalc(self)
     end
     self["move_speed"] = base_pet_move_speed
     self:calc_score()
-    self.fight_power = math.floor(calculate_fight_power(self))
+    self.fight_power = math_floor(calculate_fight_power(self))
 
     local hp_change_percent
     if self.hp_max ~= old_hp_max and old_hp_max ~= 0 then
         local puppet = self:get_puppet()
         if puppet ~= nil and old_hp_max ~= 0 then
-            hp_change_percent = math.floor(puppet.hp * self.hp_max / old_hp_max)
+            hp_change_percent = math_floor(puppet.hp * self.hp_max / old_hp_max)
         end
     end
     return hp_change_percent

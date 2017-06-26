@@ -8,13 +8,14 @@
 
 local common_parameter_formula = require "data/common_parameter_formula"
 local const = require "Common/constant"
+local loadstring = loadstring
 
 --战斗力公式。a=生命值，b=内力，c=攻击(物攻+法功)，d=防御(物防+法防)，e=对抗属性(命中，闪避等之和)。f=元素攻击，g=元素防御，h=控制抗性，i=忽略控制抗性，j=技能等级之和
-local calculate_fight_power = loadstring("return function (a, b,c,d,e,f,g,h,i,j) return "..common_parameter_formula.Formula[10].Formula.." end")()
+local calculate_fight_power
 --装备评分。a=生命值，b=内力，c=攻击(物攻+法功)，d=防御(物防+法防)，e=对抗属性(命中，闪避等之和)。f=元素攻击，g=元素防御。
-local calculate_equip_score = loadstring("return function (a, b,c,d,e,f,g) return "..common_parameter_formula.Formula[13].Formula.." end")()
+local calculate_equip_score
 --综合实力。a=人物战力，b=人物灵性，c=最高战力宠物战力和
-local calculate_total_power = loadstring("return function (a, b,c,d,e,f,g) return "..common_parameter_formula.Formula[16].Formula.." end")()
+local calculate_total_power
 
 
 local function get_recovery_drug_cd(type)
@@ -28,26 +29,58 @@ local function get_recovery_drug_cd(type)
     return 20
 end
 
-local formula_str = require("data/common_parameter_formula").Formula[14].Formula      --每次杀人获得功勋=int[max（1，杀人获得威望^0.5*0.5）]
-formula_str =  "return function (a) return "..formula_str.." end"
-local feats_from_kill_formula = loadstring(formula_str)()
+--每次杀人获得功勋=int[max（1，杀人获得威望^0.5*0.5）]
+local feats_from_kill_formula
+--队员组队经验 a=杀怪exp，b=组队人数
+local team_member_get_exp
 
-formula_str = require("data/common_parameter_formula").Formula[17].Formula      --队员组队经验 a=杀怪exp，b=组队人数
-formula_str =  "return function (a, b) return "..formula_str.." end"
-local team_member_get_exp = loadstring(formula_str)()
+local SERVER_LEVEL_IN_COUNT_NUM       --服务器等级=排行榜前500（即本参数）人平均等级+修正等级（读ID=52）
+local SERVER_LEVEL_REVISE             --服务器等级对应修正等级
+local REFREASH_INTERVAL   --排行榜刷新时间
+local RANK_LIST_DISPLAY_NUMBER    --排行榜显示数目
+local RANK_LIST_NUMBER    --排行榜后端计算数目
+local HIDE_NAME_CD   --隐姓埋名cd时间
+local MIN_SERVER_LEVEL       --服务器最小等级
+local LINE_PLAYER_UPPER_LIMIT_A       --服务器分线玩家数量上限
+local LINE_PLAYER_UPPER_LIMIT_B       --服务器分线玩家绝对数量上限
+local LINE_PLAYER_UPPER_LIMIT_FLUENCY                   --流畅上限
+local DAILY_REFRESH_HOUR                --日常刷新时间-小时数
+local DAILY_REFRESH_MIN                 --日常刷新时间-分钟数
+local talent_consume_return_percent     --天赋更换返还比例
 
-local SERVER_LEVEL_IN_COUNT_NUM = require("data/common_parameter_formula").Parameter[51].Parameter       --服务器等级=排行榜前500（即本参数）人平均等级+修正等级（读ID=52）
-local SERVER_LEVEL_REVISE = require("data/common_parameter_formula").Parameter[52].Parameter             --服务器等级对应修正等级
-local REFREASH_INTERVAL = require("data/common_parameter_formula").Parameter[50].Parameter * 60000   --排行榜刷新时间
-local RANK_LIST_DISPLAY_NUMBER = require("data/common_parameter_formula").Parameter[48].Parameter    --排行榜显示数目
-local RANK_LIST_NUMBER = require("data/common_parameter_formula").Parameter[49].Parameter    --排行榜后端计算数目
-local HIDE_NAME_CD =  require("data/common_parameter_formula").Parameter[53].Parameter / 10    --隐姓埋名cd时间
-local MIN_SERVER_LEVEL = require("data/common_parameter_formula").Parameter[55].Parameter       --服务器最小等级
-local LINE_PLAYER_UPPER_LIMIT_A = require("data/common_parameter_formula").Parameter[32].Parameter        --服务器分线玩家数量上限
-local LINE_PLAYER_UPPER_LIMIT_B = require("data/common_parameter_formula").Parameter[33].Parameter        --服务器分线玩家绝对数量上限
-local LINE_PLAYER_UPPER_LIMIT_FLUENCY = LINE_PLAYER_UPPER_LIMIT_A*0.8                             --流畅上限
-local DAILY_REFRESH_HOUR = require("data/common_parameter_formula").Parameter[37].Parameter
-local DAILY_REFRESH_MIN = require("data/common_parameter_formula").Parameter[38].Parameter
+local function reload()
+    --战斗力公式。a=生命值，b=内力，c=攻击(物攻+法功)，d=防御(物防+法防)，e=对抗属性(命中，闪避等之和)。f=元素攻击，g=元素防御，h=控制抗性，i=忽略控制抗性，j=技能等级之和
+    calculate_fight_power = loadstring("return function (a, b,c,d,e,f,g,h,i,j) return "..common_parameter_formula.Formula[10].Formula.." end")()
+    --装备评分。a=生命值，b=内力，c=攻击(物攻+法功)，d=防御(物防+法防)，e=对抗属性(命中，闪避等之和)。f=元素攻击，g=元素防御。
+    calculate_equip_score = loadstring("return function (a, b,c,d,e,f,g) return "..common_parameter_formula.Formula[13].Formula.." end")()
+    --综合实力。a=人物战力，b=人物灵性，c=最高战力宠物战力和
+    calculate_total_power = loadstring("return function (a, b,c,d,e,f,g) return "..common_parameter_formula.Formula[16].Formula.." end")()
+
+
+    local formula_str = require("data/common_parameter_formula").Formula[14].Formula      --每次杀人获得功勋=int[max（1，杀人获得威望^0.5*0.5）]
+    formula_str =  "return function (a) return "..formula_str.." end"
+    feats_from_kill_formula = loadstring(formula_str)()
+
+    formula_str = require("data/common_parameter_formula").Formula[17].Formula      --队员组队经验 a=杀怪exp，b=组队人数
+    formula_str =  "return function (a, b) return "..formula_str.." end"
+    team_member_get_exp = loadstring(formula_str)()
+
+    SERVER_LEVEL_IN_COUNT_NUM = require("data/common_parameter_formula").Parameter[51].Parameter       --服务器等级=排行榜前500（即本参数）人平均等级+修正等级（读ID=52）
+    SERVER_LEVEL_REVISE = require("data/common_parameter_formula").Parameter[52].Parameter             --服务器等级对应修正等级
+    REFREASH_INTERVAL = require("data/common_parameter_formula").Parameter[50].Parameter * 60000   --排行榜刷新时间
+    RANK_LIST_DISPLAY_NUMBER = require("data/common_parameter_formula").Parameter[48].Parameter    --排行榜显示数目
+    RANK_LIST_NUMBER = require("data/common_parameter_formula").Parameter[49].Parameter    --排行榜后端计算数目
+    HIDE_NAME_CD =  require("data/common_parameter_formula").Parameter[53].Parameter / 10    --隐姓埋名cd时间
+    MIN_SERVER_LEVEL = require("data/common_parameter_formula").Parameter[55].Parameter       --服务器最小等级
+    LINE_PLAYER_UPPER_LIMIT_A = require("data/common_parameter_formula").Parameter[32].Parameter        --服务器分线玩家数量上限
+    LINE_PLAYER_UPPER_LIMIT_B = require("data/common_parameter_formula").Parameter[33].Parameter        --服务器分线玩家绝对数量上限
+    LINE_PLAYER_UPPER_LIMIT_FLUENCY = LINE_PLAYER_UPPER_LIMIT_A*0.8                             --流畅上限
+    DAILY_REFRESH_HOUR = require("data/common_parameter_formula").Parameter[37].Parameter
+    DAILY_REFRESH_MIN = require("data/common_parameter_formula").Parameter[38].Parameter
+
+    talent_consume_return_percent = require("data/common_parameter_formula").Parameter[58].Parameter
+end
+reload()
 
 return {
     get_recovery_drug_cd = get_recovery_drug_cd,
@@ -67,4 +100,8 @@ return {
     LINE_PLAYER_UPPER_LIMIT_A = LINE_PLAYER_UPPER_LIMIT_A,
     LINE_PLAYER_UPPER_LIMIT_B = LINE_PLAYER_UPPER_LIMIT_B,
     LINE_PLAYER_UPPER_LIMIT_FLUENCY = LINE_PLAYER_UPPER_LIMIT_FLUENCY,
+    DAILY_REFRESH_HOUR = DAILY_REFRESH_HOUR,
+    DAILY_REFRESH_MIN = DAILY_REFRESH_MIN,
+    talent_consume_return_percent = talent_consume_return_percent,
+    reload = reload,
 }

@@ -238,10 +238,10 @@ end
 
 function country_player.on_add_hp(self, input)
     local monster_scene_id = input.monster_scene_id
-    local hp_persent = input.hp_persent
+    local hp_percent = input.hp_percent
     local callback_table = input.callback_table
     local actor_id = input.actor_id
-    local result = country_war.on_add_hp(monster_scene_id, hp_persent)
+    local result = country_war.on_add_hp(monster_scene_id, hp_percent)
 
     callback_table.result = result
     callback_table.actor_id = actor_id

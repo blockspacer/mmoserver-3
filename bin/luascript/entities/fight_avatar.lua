@@ -198,6 +198,12 @@ end
 
 function fight_avatar.set_connect_state(self,value)
     self.connect_state = value
+    if value == fight_avatar_connect_state.offline then
+        local puppet = self:get_puppet()
+        if puppet ~= nil then
+            puppet:StopMove()
+        end
+    end
 end
 
 function fight_avatar.on_notice_fight_avatar_logout(self,input)

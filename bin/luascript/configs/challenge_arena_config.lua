@@ -14,28 +14,8 @@ local flog = require "basic/log"
 local const = require "Common/constant"
 local math = require "math"
 
---检查出生点
-for id,v in pairs(challenge_arena.ArenaScene) do
-    local find = false
-    for _,v1 in pairs(challenge_arena[v.SceneSetting]) do
-        if v1.Type == const.ENTITY_TYPE_BIRTHDAY_POS then
-            find = true
-            break
-        end
-    end
-    if find == false then
-        flog("error","can not find birth position in arena,id "..id)
-    end
-end
-
 local first_arena_grade_id = 0
 local arena_grade_configs = {}
-for _,v in pairs(challenge_arena.QualifyingGrade) do
-    arena_grade_configs[v.ID] = v
-    if v.NextGrade == 0 then
-        first_arena_grade_id = v.ID
-    end
-end
 
 local function get_arena_grade_config(grade_id)
     return arena_grade_configs[grade_id]
@@ -53,18 +33,6 @@ local function get_arena_grade_name(grade_id)
 end
 
 local qualifying_day_reward_configs = {}
-for _,v in pairs(challenge_arena.QualifyingReward) do
-    if qualifying_day_reward_configs[v.MainGrade] == nil then
-        qualifying_day_reward_configs[v.MainGrade] = {}
-    end
-    table.insert(qualifying_day_reward_configs[v.MainGrade],v)
-end
-
-for _,configs in pairs(qualifying_day_reward_configs) do
-    table.sort(configs,function(a,b)
-        return a.RankedLowerlimit < b.RankedLowerlimit
-    end)
-end
 
 local function get_qualifying_day_reward_config(grade_id,rank)
     local qualifying_day_reward_config = nil
@@ -101,15 +69,6 @@ local arena_dogfight_min_player_count = 10000000
 --混战赛匹配表
 local arena_dogfight_matching_configs = {}
 local arena_dogfight_matching_create_time = {}
-for _,v in pairs(challenge_arena.Matching2) do
-    arena_dogfight_matching_configs[v.CreateTime] = v
-    table.insert(arena_dogfight_matching_create_time,v.CreateTime)
-    if arena_dogfight_min_player_count > v.PlayerNum then
-        arena_dogfight_min_player_count = v.PlayerNum
-    end
-end
-
-table.sort(arena_dogfight_matching_create_time)
 
 local function get_dogfight_matching_config(create_time)
     local limit = 0
@@ -128,18 +87,12 @@ local function get_arena_dogfight_min_player_count()
 end
 
 local grade_keeper_configs = {}
-for _,v in pairs(challenge_arena.GradeKeeper) do
-    grade_keeper_configs[v.GradeID] = v
-end
 
 local function get_keeper_config(id)
     return grade_keeper_configs[id]
 end
 
 local monsters = {}
-for _,v in pairs(challenge_arena.MonsterSetting) do
-    monsters[v.ID] = v
-end
 
 local function get_qualifying_arena_fight_ready_time()
     return challenge_arena.Parameter[6].Value[1]/1000
@@ -177,9 +130,6 @@ local function get_occupy_score_interval()
 end
 
 local arena_plunder_score_configs = {}
-for _,v in pairs(challenge_arena.MeleeLoot) do
-    arena_plunder_score_configs[v.Deathlowerlimit] = v
-end
 
 local function get_arena_plunder_score_config(die_count)
     local arena_plunder_score_config = nil
@@ -226,6 +176,75 @@ local function get_weekly_reward_time()
     return challenge_arena.Parameter[30].Value
 end
 
+local function reload()
+    --检查出生点
+    for id,v in pairs(challenge_arena.ArenaScene) do
+        local find = false
+        for _,v1 in pairs(challenge_arena[v.SceneSetting]) do
+            if v1.Type == const.ENTITY_TYPE_BIRTHDAY_POS then
+                find = true
+                break
+            end
+        end
+        if find == false then
+            flog("error","can not find birth position in arena,id "..id)
+        end
+    end
+
+    first_arena_grade_id = 0
+    arena_grade_configs = {}
+    for _,v in pairs(challenge_arena.QualifyingGrade) do
+        arena_grade_configs[v.ID] = v
+        if v.NextGrade == 0 then
+            first_arena_grade_id = v.ID
+        end
+    end
+
+    local qualifying_day_reward_configs = {}
+    for _,v in pairs(challenge_arena.QualifyingReward) do
+        if qualifying_day_reward_configs[v.MainGrade] == nil then
+            qualifying_day_reward_configs[v.MainGrade] = {}
+        end
+        table.insert(qualifying_day_reward_configs[v.MainGrade],v)
+    end
+
+    for _,configs in pairs(qualifying_day_reward_configs) do
+        table.sort(configs,function(a,b)
+            return a.RankedLowerlimit < b.RankedLowerlimit
+        end)
+    end
+
+    arena_dogfight_min_player_count = 10000000
+    --混战赛匹配表
+    arena_dogfight_matching_configs = {}
+    arena_dogfight_matching_create_time = {}
+    for _,v in pairs(challenge_arena.Matching2) do
+        arena_dogfight_matching_configs[v.CreateTime] = v
+        table.insert(arena_dogfight_matching_create_time,v.CreateTime)
+        if arena_dogfight_min_player_count > v.PlayerNum then
+            arena_dogfight_min_player_count = v.PlayerNum
+        end
+    end
+
+    table.sort(arena_dogfight_matching_create_time)
+
+    monsters = {}
+    for _,v in pairs(challenge_arena.MonsterSetting) do
+        monsters[v.ID] = v
+    end
+
+    grade_keeper_configs = {}
+    for _,v in pairs(challenge_arena.GradeKeeper) do
+        grade_keeper_configs[v.GradeID] = v
+    end
+
+    arena_plunder_score_configs = {}
+    for _,v in pairs(challenge_arena.MeleeLoot) do
+        arena_plunder_score_configs[v.Deathlowerlimit] = v
+    end
+end
+reload()
+
 return{
     get_arena_grade_config = get_arena_grade_config,
     get_qualifying_day_reward_config = get_qualifying_day_reward_config,
@@ -251,5 +270,6 @@ return{
     get_daily_reward_time = get_daily_reward_time,
     get_weekly_score_reset_time = get_weekly_score_reset_time,
     get_weekly_reward_time = get_weekly_reward_time,
+    reload = reload,
 }
 

@@ -46,7 +46,7 @@ local flog = function(name, log_str, actor_id)
     elseif name == "trace" then
         _trace(log_str)
     elseif name == 'syzDebug' then
-        --_trace(log_str)
+        _info(log_str)
     elseif name == 'net_msg' then
         if error_string[log_str] ~= nil then
             _info(error_string[log_str])

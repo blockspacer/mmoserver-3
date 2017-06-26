@@ -728,7 +728,7 @@ function faction.on_investment_faction_building(self,building_id,actor_id,invest
             return const.error_faction_not_member
         end
         local authority_config = system_faction_config.get_authority_config(member.position)
-        if authority_config == nil or investment_count > authority_config.Investment then
+        if authority_config == nil or authority_config.Investment ~= 1 then
             return const.error_faction_fund_invest_count_limit
         end
 

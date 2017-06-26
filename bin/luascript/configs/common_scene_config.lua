@@ -21,6 +21,8 @@ local trigger_guard_npc_scheme
 local transport_fleet_original_scheme = common_scene.Transporter
 local transport_fleet_scheme
 local math = math
+local fix_string = require "basic/fix_string"
+local get_config_name = require("basic/scheme").get_config_name
 
 local scenes = {}
 local born_positions = {}
@@ -116,6 +118,18 @@ local function get_scene_scheme_table()
     return common_scene
 end
 
+local function get_position_string(scene_id, x, z, game_id)
+    local pos_str = fix_string.position_str
+    local scene_config = common_scene.MainScene[scene_id]
+    if scene_config == nil then
+        flog("error", "get_position_string error scene_id "..tostring(scene_id))
+        return ""
+    end
+    local scene_name = get_config_name(scene_config)
+    local pos_str = string.format(pos_str, game_id, scene_name, x, z)
+    return pos_str
+end
+
 local function reload()
     born_positions = {}
     --检查出生点
@@ -204,6 +218,7 @@ return{
     get_scene_element_config = get_scene_element_config,
     get_scene_resource_ids = get_scene_resource_ids,
     get_scene_scheme_table = get_scene_scheme_table,
+    get_position_string = get_position_string,
     reload = reload,
 }
 

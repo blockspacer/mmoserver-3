@@ -24,6 +24,8 @@ local fix_string = require "basic/fix_string"
 local _get_now_time_second = _get_now_time_second
 local broadcast_message = require("basic/net").broadcast_message
 local is_in_battle = false
+local math_floor = math.floor
+local game_id = _get_serverid()
 
 local BATTLE_SCENE_LIST = const.BATTLE_SCENE_LIST
 local FLEET_TYPE_NAME_TO_INDEX = const.FLEET_TYPE_NAME_TO_INDEX
@@ -383,7 +385,14 @@ local function on_transport_fleet_be_attack(puppet)
     if not transport_fleet_is_under_attack[trans_id] then
         -- 广播消息
         local country = puppet.data.Camp
-        local message_data = create_system_message_by_id(const.SYSTEM_MESSAGE_ID.transport_fleet_is_under_attack, {}, fix_string["country_name_"..country])
+        local scene_id = puppet:GetSceneID()
+        local pos = puppet:GetPosition()
+        local x = math_floor(pos.x * 100)
+        local y = math_floor(pos.y * 100)
+        local z = math_floor(pos.z * 100)
+        local attach = {type = 'position' , x = x, z = z, scene_id = scene_id, game_id = game_id }
+        local pos_str = common_scene_config.get_position_string(scene_id, pos.x, pos.z, game_id)
+        local message_data = create_system_message_by_id(const.SYSTEM_MESSAGE_ID.transport_fleet_is_under_attack, {}, fix_string["country_name_"..country], pos_str)
         broadcast_message(const.SC_MESSAGE_LUA_SYSTEM_MESSAGE, message_data, country)
     end
 
@@ -437,7 +446,10 @@ local function get_transport_fleet_position(scene_id)
         if puppet:GetSceneID() == scene_id then
             local pos = puppet:GetPosition()
             if pos ~= nil then
-                transport_fleet_pos[id] = pos
+                local x = math_floor(pos.x * 100)
+                local y = math_floor(pos.y * 100)
+                local z = math_floor(pos.z * 100)
+                transport_fleet_pos[id] = {x = x, y = y, z = z}
             end
         end
     end

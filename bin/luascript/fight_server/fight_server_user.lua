@@ -113,7 +113,9 @@ function fight_server_user.set_connect_state(self,value,delay_disconnect)
     end
     avatar:set_connect_state(value)
     self:remove_delay_disconnect_timer()
-    self.delay_disconnect_timer = timer.create_timer(delay_disconnect,const.CLOSE_SESSION_DELAY_TIME,0)
+    if delay_disconnect ~= nil then
+        self.delay_disconnect_timer = timer.create_timer(delay_disconnect,const.CLOSE_SESSION_DELAY_TIME,0)
+    end
 end
 
 function fight_server_user.check_can_leave(self)

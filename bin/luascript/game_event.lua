@@ -58,6 +58,7 @@ function OnClientMessage(session_id, key_action, data)
 
     _info("PlayerLuaRequest "..string.format("%16.0f",session_id))
     user_manage.on_message(session_id, key_action, data)
+    _info("PlayerLuaRequest end"..string.format("%16.0f",session_id))
 end
 
 local message_handler = {}

@@ -688,8 +688,7 @@ function login_user.on_disconnect(self, session_id, callback)
         flog("info", "Failed get actor on_disconnect "..tostring(self.user_id))
         return
     end
-    avatar.is_offline = true
-    avatar:save_data()
+    avatar:player_offline()
     self.disconnect_timer = timer.create_timer(callback, const.CLOSE_SESSION_DELAY_TIME, 0)
 end
 

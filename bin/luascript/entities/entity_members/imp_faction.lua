@@ -51,7 +51,7 @@ imp_faction.__params = params
 
 function imp_faction.__ctor(self)
     self.faction_scene_gameid = 0
-    self.faction_building_investment_count = {}
+    self.faction_building_investment_counts = {}
     self.faction_building_investment = false
     self.faction_altar_share_spritual = 0
 end
@@ -61,8 +61,8 @@ local function _refresh_apply_number(self)
     self.apply_num_refresher = nil
 end
 
-local function _refresh_faction_building_investment_count(self)
-    self.faction_building_investment_count = {}
+local function _refresh_faction_building_investment_counts(self)
+    self.faction_building_investment_counts = {}
 end
 
 --根据dict初始化
@@ -77,14 +77,14 @@ function imp_faction.imp_faction_init_from_dict(self, dict)
         end
     end
 
-    self.faction_building_investment_count = table.copy(dict.faction_building_investment_count) or {}
+    self.faction_building_investment_counts = table.copy(dict.faction_building_investment_counts) or {}
 
     if dict.apply_num_last_refresh_time ~= nil then
         self.apply_num_refresher = onetime_refresher(_refresh_apply_number, dict.apply_num_last_refresh_time, ONE_HOUR_SECOND)
         self.apply_num_refresher:check_refresh(self)
     end
 
-    self.faction_building_investment_count_refresh = daily_refresher(_refresh_faction_building_investment_count, self.last_refresh_investment_count_time, common_parameter_formula_config.DAILY_REFRESH_HOUR, common_parameter_formula_config.DAILY_REFRESH_MIN)
+    self.faction_building_investment_count_refresh = daily_refresher(_refresh_faction_building_investment_counts, self.last_refresh_investment_count_time, common_parameter_formula_config.DAILY_REFRESH_HOUR, common_parameter_formula_config.DAILY_REFRESH_MIN)
 end
 
 function imp_faction.imp_faction_init_from_other_game_dict(self,dict)
@@ -477,13 +477,10 @@ function imp_faction.on_query_faction_building(self,input)
 
     self.faction_building_investment_count_refresh:check_refresh(self)
     input.faction_id = self.faction_id
-    if self.faction_building_investment_count[input.building_id] == nil then
-        self.faction_building_investment_count[input.building_id] = {}
-        self.faction_building_investment_count[input.building_id].coin_count = 0
-        self.faction_building_investment_count[input.building_id].fund_count = 0
+    if self.faction_building_investment_counts[input.building_id] == nil then
+        self.faction_building_investment_counts[input.building_id] = 0
     end
-    input.coin_count = self.faction_building_investment_count[input.building_id].coin_count
-    input.fund_count = self.faction_building_investment_count[input.building_id].fund_count
+    input.investment_count = self.faction_building_investment_counts[input.building_id]
     self:send_message_to_faction_server(input)
 end
 
@@ -509,23 +506,15 @@ function imp_faction.on_investment_faction_building(self,input)
 
     self.faction_building_investment_count_refresh:check_refresh(self)
 
-    if self.faction_building_investment_count[input.building_id] == nil then
-        self.faction_building_investment_count[input.building_id] = {}
-        self.faction_building_investment_count[input.building_id].coin_count = 0
-        self.faction_building_investment_count[input.building_id].fund_count = 0
+    if self.faction_building_investment_counts[input.building_id] == nil then
+        self.faction_building_investment_counts[input.building_id] = 0
     end
     --确认花费
-    if input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.coin then
-        input.investment_count = self.faction_building_investment_count[input.building_id].coin_count + 1
-    elseif input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.fund then
-        input.investment_count = self.faction_building_investment_count[input.building_id].fund_count + 1
-    else
-        return
-    end
+    input.investment_count = self.faction_building_investment_counts[input.building_id] + 1
 
     local cost_config = system_faction_config.get_investment_config(input.investment_count)
     if cost_config == nil then
-        flog("tmlDebug","imp_faction.on_investment_faction_building cost_config == nil coin_count "..(self.faction_building_investment_count[input.building_id].coin_count+1))
+        flog("tmlDebug","imp_faction.on_investment_faction_building cost_config == nil coin_count "..(self.faction_building_investment_counts[input.building_id]+1))
         return
     end
     if input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.coin then
@@ -535,8 +524,6 @@ function imp_faction.on_investment_faction_building(self,input)
         end
         self:remove_item_by_id(cost_config.Cost1[1],cost_config.Cost1[2])
     end
-    input.coin_count = self.faction_building_investment_count[input.building_id].coin_count
-    input.fund_count = self.faction_building_investment_count[input.building_id].fund_count
     input.faction_id = self.faction_id
     input.actor_name = self.actor_name
     self.faction_building_investment = true
@@ -545,14 +532,7 @@ end
 
 function imp_faction.on_investment_faction_building_ret(self,input,sync_data)
     self.faction_building_investment = false
-    local investment_count = 1
-    if input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.coin then
-        input.investment_count = self.faction_building_investment_count[input.building_id].coin_count + 1
-    elseif input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.fund then
-        input.investment_count = self.faction_building_investment_count[input.building_id].fund_count + 1
-    else
-        return
-    end
+    local investment_count = self.faction_building_investment_counts[input.building_id] + 1
     local cost_config = system_faction_config.get_investment_config(investment_count)
     if cost_config == nil then
         return
@@ -565,13 +545,8 @@ function imp_faction.on_investment_faction_building_ret(self,input,sync_data)
         end
         return
     else
-        if input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.coin then
-            self.faction_building_investment_count[input.building_id].coin_count = self.faction_building_investment_count[input.building_id].coin_count + 1
-        elseif input.investment_type == const.FACTION_BUILDING_INVESTMENT_TYPE.fund then
-            self.faction_building_investment_count[input.building_id].fund_count = self.faction_building_investment_count[input.building_id].fund_count + 1
-        else
-            return
-        end
+        self.faction_building_investment_count_refresh:check_refresh(self)
+        self.faction_building_investment_counts[input.building_id] = self.faction_building_investment_counts[input.building_id] + 1
     end
 
     self:imp_assets_write_to_sync_dict(sync_data)
@@ -605,13 +580,10 @@ function imp_faction.on_upgrade_faction_building(self,input)
 
     self.faction_building_investment_count_refresh:check_refresh(self)
     input.faction_id = self.faction_id
-    if self.faction_building_investment_count[input.building_id] == nil then
-        self.faction_building_investment_count[input.building_id] = {}
-        self.faction_building_investment_count[input.building_id].coin_count = 0
-        self.faction_building_investment_count[input.building_id].fund_count = 0
+    if self.faction_building_investment_counts[input.building_id] == nil then
+        self.faction_building_investment_counts[input.building_id] = 0
     end
-    input.coin_count = self.faction_building_investment_count[input.building_id].coin_count
-    input.fund_count = self.faction_building_investment_count[input.building_id].fund_count
+    input.investment_count = self.faction_building_investment_counts[input.building_id]
     self:send_message_to_faction_server(input)
 end
 

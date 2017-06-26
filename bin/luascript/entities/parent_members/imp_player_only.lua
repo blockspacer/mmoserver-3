@@ -24,6 +24,8 @@ local system_friends_chat_config = require "configs/system_friends_chat_config"
 local DISAPPEAR_TIME = require("data/common_parameter_formula").Parameter[31].Parameter   --物品消失时间
 local string = string
 local line = require "global_line/line"
+local system_faction_config = require "configs/system_faction_config"
+local common_scene_config = require "configs/common_scene_config"
 
 local TELEPORTATION_RADIUS_SQUARE = 16          --传送阵半径平方
 local FLY_SKILL_CD = 5
@@ -493,6 +495,13 @@ function imp_player_only.get_pos(self)
 end
 
 local function _get_scene_detail(scene, target_scene_id)
+    --帮会地图与普通地图在不同表格，如果还有其他表格，建议更改配置
+    local scene_type = scene:get_scene_type()
+    if scene_type == const.SCENE_TYPE.FACTION then
+        return common_scene_config.get_scene_detail_config(target_scene_id)
+    elseif (scene_type == const.SCENE_TYPE.WILD or scene_type == const.SCENE_TYPE.CITY) and target_scene_id == const.SCENE_TYPE.FACTION then
+        return system_faction_config.get_scene_setting(target_scene_id)
+    end
     local index_scheme, total_scheme = scene:get_total_scene_config()
     local scene_cfg = index_scheme[target_scene_id]
     return total_scheme[scene_cfg.SceneSetting]
