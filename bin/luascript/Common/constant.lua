@@ -686,7 +686,7 @@ return {
     error_team_member_refuse_enter_dungeon = 1318,  --有队伍成员拒绝进入副本
     error_faction_building_lock = 1319,             --当前帮派建筑未解锁
     error_faction_not_member = 1320,                --你不是本帮成员
-    error_faction_fund_invest_count_limit = 1321,   --你已达到帮派资金投资上限
+    error_faction_fund_invest_count_limit = 1321,   --你没有权限进行帮派资金投资
     error_faction_upgrade_authority = 1322,         --你没有权限升级帮派建筑
     error_faction_upgrade_cd = 1323,                --帮派建筑在冷却中
     error_faction_upgrade_total_level = 1324,         --帮派建筑总等级不足，无法升级帮派大厅
