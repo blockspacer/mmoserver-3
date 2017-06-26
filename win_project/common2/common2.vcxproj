@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{15942543-B840-4773-82B2-3D1D65C698D1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>common2</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\lib\$(Platform)\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)\_obj\common2</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>HIREDIS_WIN;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\;$(SolutionDir)\src\externlibsrc\;$(SolutionDir)\src\externlibsrc\lua\;$(SolutionDir)\src\externlibsrc\libevent\include;$(SolutionDir)\src\externlibsrc\libevent\WIN32-Code;$(SolutionDir)\src\externlibsrc\hiredis-win-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\common\AOIModule.cpp" />
+    <ClCompile Include="..\..\src\common\AOIProxy.cpp" />
+    <ClCompile Include="..\..\src\common\AOIProxyManager.cpp" />
+    <ClCompile Include="..\..\src\common\AOIScene.cpp" />
+    <ClCompile Include="..\..\src\common\ClientNetModule.cpp" />
+    <ClCompile Include="..\..\src\common\compat-5.2.cpp" />
+    <ClCompile Include="..\..\src\common\exception.cpp" />
+    <ClCompile Include="..\..\src\common\fifonolock.cpp" />
+    <ClCompile Include="..\..\src\common\GameManagerClientModule.cpp" />
+    <ClCompile Include="..\..\src\common\getopt.cpp" />
+    <ClCompile Include="..\..\src\common\lfs.cpp" />
+    <ClCompile Include="..\..\src\common\LogModule.cpp" />
+    <ClCompile Include="..\..\src\common\LuaModule.cpp" />
+    <ClCompile Include="..\..\src\common\main.cpp" />
+    <ClCompile Include="..\..\src\common\md5.cpp" />
+    <ClCompile Include="..\..\src\common\md5lib.cpp" />
+    <ClCompile Include="..\..\src\common\message.cpp" />
+    <ClCompile Include="..\..\src\common\Net.cpp" />
+    <ClCompile Include="..\..\src\common\NetModule.cpp" />
+    <ClCompile Include="..\..\src\common\octimer.cpp" />
+    <ClCompile Include="..\..\src\common\redismodule.cpp" />
+    <ClCompile Include="..\..\src\common\Scene.cpp" />
+    <ClCompile Include="..\..\src\common\ServerConfigure.cpp" />
+    <ClCompile Include="..\..\src\common\serverproxy.cpp" />
+    <ClCompile Include="..\..\src\common\servicemanager.cpp" />
+    <ClCompile Include="..\..\src\common\shape.cpp" />
+    <ClCompile Include="..\..\src\common\telnet.cpp" />
+    <ClCompile Include="..\..\src\common\timeimp.cpp" />
+    <ClCompile Include="..\..\src\common\timemeter.cpp" />
+    <ClCompile Include="..\..\src\common\Timer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\common\AOIModule.h" />
+    <ClInclude Include="..\..\src\common\AOIProxy.h" />
+    <ClInclude Include="..\..\src\common\AOIProxyManager.h" />
+    <ClInclude Include="..\..\src\common\AOIScene.h" />
+    <ClInclude Include="..\..\src\common\baseluafunction.h" />
+    <ClInclude Include="..\..\src\common\BaseProxy.h" />
+    <ClInclude Include="..\..\src\common\BaseScene.h" />
+    <ClInclude Include="..\..\src\common\bson.h" />
+    <ClInclude Include="..\..\src\common\CityScene.h" />
+    <ClInclude Include="..\..\src\common\clientmanager.h" />
+    <ClInclude Include="..\..\src\common\ClientNetModule.h" />
+    <ClInclude Include="..\..\src\common\ClientProxy.h" />
+    <ClInclude Include="..\..\src\common\common.h" />
+    <ClInclude Include="..\..\src\common\common_define.h" />
+    <ClInclude Include="..\..\src\common\compat-5.2.h" />
+    <ClInclude Include="..\..\src\common\DungeonScene.h" />
+    <ClInclude Include="..\..\src\common\easylogging++.h" />
+    <ClInclude Include="..\..\src\common\exception.h" />
+    <ClInclude Include="..\..\src\common\FieldScene.h" />
+    <ClInclude Include="..\..\src\common\fifonolock.h" />
+    <ClInclude Include="..\..\src\common\GameManagerClientModule.h" />
+    <ClInclude Include="..\..\src\common\getopt.h" />
+    <ClInclude Include="..\..\src\common\ILogModule.h" />
+    <ClInclude Include="..\..\src\common\ILuaModule.h" />
+    <ClInclude Include="..\..\src\common\INet.h" />
+    <ClInclude Include="..\..\src\common\INetModule.h" />
+    <ClInclude Include="..\..\src\common\IProxy.h" />
+    <ClInclude Include="..\..\src\common\IProxyModuel.h" />
+    <ClInclude Include="..\..\src\common\IScene.h" />
+    <ClInclude Include="..\..\src\common\json.hpp" />
+    <ClInclude Include="..\..\src\common\lfs.h" />
+    <ClInclude Include="..\..\src\common\LogModule.h" />
+    <ClInclude Include="..\..\src\common\lua-hiredis.h" />
+    <ClInclude Include="..\..\src\common\LuaModule.h" />
+    <ClInclude Include="..\..\src\common\luaproxyfunction.h" />
+    <ClInclude Include="..\..\src\common\luaredis.h" />
+    <ClInclude Include="..\..\src\common\MapEx.h" />
+    <ClInclude Include="..\..\src\common\md5.h" />
+    <ClInclude Include="..\..\src\common\message.h" />
+    <ClInclude Include="..\..\src\common\Net.h" />
+    <ClInclude Include="..\..\src\common\NetModule.h" />
+    <ClInclude Include="..\..\src\common\NpcProxy.h" />
+    <ClInclude Include="..\..\src\common\octimer.h" />
+    <ClInclude Include="..\..\src\common\Platform.h" />
+    <ClInclude Include="..\..\src\common\redismodule.h" />
+    <ClInclude Include="..\..\src\common\Scene.h" />
+    <ClInclude Include="..\..\src\common\ServerConfigure.h" />
+    <ClInclude Include="..\..\src\common\serverproxy.h" />
+    <ClInclude Include="..\..\src\common\servicemanager.h" />
+    <ClInclude Include="..\..\src\common\shape.h" />
+    <ClInclude Include="..\..\src\common\Singleton.h" />
+    <ClInclude Include="..\..\src\common\SocketSession.h" />
+    <ClInclude Include="..\..\src\common\telnet.h" />
+    <ClInclude Include="..\..\src\common\threaddefine.h" />
+    <ClInclude Include="..\..\src\common\threadpool.h" />
+    <ClInclude Include="..\..\src\common\timemeter.h" />
+    <ClInclude Include="..\..\src\common\Timer.h" />
+    <ClInclude Include="..\..\src\common\util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\common\Makefile" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
