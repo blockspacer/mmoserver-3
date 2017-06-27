@@ -112,6 +112,12 @@ bool GameServer::CheckServerStart()
 
 bool GameServer::Tick()
 {
+	uint64_t now = GetNowTimeMille();
+	if (now - m_lastTickTime < 30)
+	{
+		return false;
+	}
+	m_lastTickTime = now;
 	// 超过10ms运行时间的记录下来
 	TimeMeter tm(25);
 
@@ -135,21 +141,6 @@ bool GameServer::Tick()
 	tm.Stamp("Telnet");
 
 	tm.Check(MSG_MARK, "game");
-
-	uint64_t endTime = GetNowTimeMille();
-
-	uint64_t timerTime = CTimerMgr::Instance()->GetLatestTimerTime();
-
-	//if (timerTime > endTime && (timerTime - endTime) < 7)
-	//{
-	//	// 到最近定时器出发不足10ms的
-	//	std::this_thread::sleep_for(std::chrono::milliseconds(5));
-	//}
-	//else
-	//{
-	//	// 最多睡10ms
-	//	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	//}
 	
 	return true;
 }

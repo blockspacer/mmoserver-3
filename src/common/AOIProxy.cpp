@@ -405,7 +405,7 @@ int AOIProxy::EntityType()
 	return m_entityType;
 }
 
-bool AOIProxy::WalkTo(Point3D & destPosition, Point3D* outPosition)
+bool AOIProxy::WalkTo(Point3D & destPosition, Point3D& realEndPosition)
 {
 	StopWalk();
 	if (!m_scene2)
@@ -413,39 +413,20 @@ bool AOIProxy::WalkTo(Point3D & destPosition, Point3D* outPosition)
 		return false;
 	}
 	WalkPath* path = nullptr;
-	try
-	{
-		path = m_scene2->GetPath(m_pos, destPosition, false);
-	}
-	catch (const std::exception& e)
-	{
-		_xerror("Failed GetPath of src %f %f %f  to end %f %f %f because of %s", m_pos.x, m_pos.y, m_pos.z, destPosition.x, destPosition.y, destPosition.z, e.what());
-		SAFE_DELETE(path);
-	}
-	catch (...)
+
+	path = m_scene2->GetPath(m_pos, destPosition, false);
+
+	// 只有1个点是起点
+	if (!path || path->size() <= 1)
 	{
 		SAFE_DELETE(path);
-	}
-	
-	if (!path)
-	{
 		return false;
-	}
-	if (path->size() == 1)
-	{
-		//寻不到路就走直线过去
-		//path->push_back(destPosition);
 	}
 		
 	// 去掉起始点
 	path->pop_front();
-	if (path->size() == 0)
-	{
-		SAFE_DELETE(path);
-		return false;
-	}
 	
-	*outPosition = path->back();
+	realEndPosition = path->back();
 	m_wholePath2.reset(path);	
 	m_isFirstWalkTick = true;
 	SetStatus(ProxyStatusMove);
@@ -567,6 +548,7 @@ void AOIProxy::WalkTick()
 
 	float remain_time = m_deltaTime;
 	bool needSetDirection = m_isFirstWalkTick;
+	m_isFirstWalkTick = false;
 	float direction = 0;
 	Point3D new_pos = m_pos;
 	while (remain_time > 0 && m_wholePath2 && m_wholePath2->size() > 0)

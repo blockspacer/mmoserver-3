@@ -16,7 +16,7 @@
 class GameServer : public IGameServer
 {
   public:
-    GameServer(std::string servername) : m_serverID(0), m_serverName(servername), m_serverState(SERVER_STATE_CREATE), m_IsWorking(false){}
+    GameServer(std::string servername) : m_serverID(0), m_serverName(servername), m_serverState(SERVER_STATE_CREATE), m_IsWorking(false), m_lastTickTime(0){}
     ~GameServer(){};
 
     bool Init(std::string pszConfigPath);
@@ -85,7 +85,7 @@ private:
     uint32_t m_deltaTickCount;   // 每n分钟循环次数
     uint64_t m_now;
 	TelnetServer m_telnet;
-
+	uint64_t m_lastTickTime;
 	bool m_IsWorking;
 };
 

@@ -106,7 +106,18 @@ void test1(std::shared_ptr<A> &a)
 	std::cout << ddd.use_count() << std::endl;
 }
 
-
+void test2()
+{
+	std::shared_ptr<std::list<int>> a = nullptr;
+	a.reset();
+	a.reset();
+	a = std::make_shared<std::list<int>>();
+	if (a)
+	{
+		a.reset();
+	}
+	a.reset();
+}
 
 int main(int argc, char* argv[])
 {
@@ -116,10 +127,11 @@ int main(int argc, char* argv[])
 	std::string     strConfigPath;
 	std::string     strServerName;
 
-	auto s = test();
-	std::cout << s.use_count() << std::endl;
+	//auto s = test();
+	//std::cout << s.use_count() << std::endl;
 
-	test1(s);
+	//test1(s);
+	test2();
 
 	while (-1 != (iOpt = ::getopt(argc, argv, "dhvc:n:")))
 	{

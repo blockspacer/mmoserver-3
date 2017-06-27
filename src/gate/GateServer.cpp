@@ -10,7 +10,7 @@
 #include "timemeter.h"
 
 
-GateServer::GateServer(std::string servername, int servertype) :m_serverName(servername), m_serverType(servertype), m_serverState(SERVER_STATE_CREATE)
+GateServer::GateServer(std::string servername, int servertype) :m_serverName(servername), m_serverType(servertype), m_serverState(SERVER_STATE_CREATE), m_lastTickTime(0)
 {
 	m_gameClientReady = false;
 	m_gamemanagerClientReady = false;
@@ -128,6 +128,13 @@ bool GateServer::Run()
 
 bool GateServer::Tick()
 {
+	uint64_t now = GetNowTimeMille();
+	if (now - m_lastTickTime < 30)
+	{
+		return false;
+	}
+	m_lastTickTime = now;
+
 	TimeMeter tm(10);
 
 	tm.Stamp();

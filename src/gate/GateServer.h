@@ -62,6 +62,7 @@ private:
 	bool m_forbidNewConnection;
 	bool m_ignoreClientMessage;
 	bool m_IsWorking;
+	uint64_t  m_lastTickTime;
 };
 
 #endif
