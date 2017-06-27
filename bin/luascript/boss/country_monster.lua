@@ -433,7 +433,6 @@ local function get_country_monster_hp(monster_scene_id)
 end
 
 local function get_archer_tower_arrow_num(monster_scene_id)
-    monster_scene_id = tostring(monster_scene_id)
     local monster_state = country_monster_state[monster_scene_id]
     if monster_state ~= nil then
         return monster_state.arrow or 0

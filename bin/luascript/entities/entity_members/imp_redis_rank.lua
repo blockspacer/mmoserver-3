@@ -487,11 +487,11 @@ local function _server_start()
         local rank_set_name = "player_rank_set_"..key
         player_id_to_index[rank_set_name] = {}
         local function timer_callback()
-            player_rank_data_cache[rank_set_name] = db_hiredis.zrevrange(rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true)
+            player_rank_data_cache[rank_set_name] = db_hiredis.zrevrange(rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true) or {}
             _refresh_player_normal_cache(rank_set_name)
             _update_server_level(rank_set_name)
         end
-        player_rank_data_cache[rank_set_name] = db_hiredis.zrevrange(rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true)
+        player_rank_data_cache[rank_set_name] = db_hiredis.zrevrange(rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true) or {}
         timer.create_timer(timer_callback, common_parameter_formula_config.REFREASH_INTERVAL + math_random(RANDOM_RANGE), const.INFINITY_CALL)
 
         if config.vocation then
@@ -500,10 +500,10 @@ local function _server_start()
                 player_id_to_index[vocation_rank_set_name] = {}
 
                 local function vocation_timer_callback()
-                    player_rank_data_cache[vocation_rank_set_name] = db_hiredis.zrevrange(vocation_rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true)
+                    player_rank_data_cache[vocation_rank_set_name] = db_hiredis.zrevrange(vocation_rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true) or {}
                     _refresh_player_normal_cache(vocation_rank_set_name)
                 end
-                player_rank_data_cache[vocation_rank_set_name] = db_hiredis.zrevrange(vocation_rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true)
+                player_rank_data_cache[vocation_rank_set_name] = db_hiredis.zrevrange(vocation_rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true) or {}
                 timer.create_timer(vocation_timer_callback, common_parameter_formula_config.REFREASH_INTERVAL + math_random(RANDOM_RANGE), const.INFINITY_CALL)
             end
         end
@@ -530,13 +530,13 @@ function imp_redis_rank.gm_refresh_all_player_rank()
     for key, config in pairs(PLAYER_VALUE_LIST) do
         local rank_set_name = "player_rank_set_"..key
         player_id_to_index[rank_set_name] = {}
-        player_rank_data_cache[rank_set_name] = db_hiredis.zrevrange(rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true)
+        player_rank_data_cache[rank_set_name] = db_hiredis.zrevrange(rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true) or {}
 
         if config.vocation then
             for vocation, _ in pairs(VOCATION_ID_TO_NAME) do
                 local vocation_rank_set_name = string_format("player_vocation_rank_set_%d_%s", vocation, key)
                 player_id_to_index[vocation_rank_set_name] = {}
-                player_rank_data_cache[vocation_rank_set_name] = db_hiredis.zrevrange(vocation_rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true)
+                player_rank_data_cache[vocation_rank_set_name] = db_hiredis.zrevrange(vocation_rank_set_name, 0, common_parameter_formula_config.RANK_LIST_NUMBER - 1, true) or {}
             end
         end
     end
