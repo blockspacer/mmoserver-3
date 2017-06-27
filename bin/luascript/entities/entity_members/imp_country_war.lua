@@ -519,6 +519,10 @@ function imp_country_war.query_country_npc_info(self,input)
             data.npcs_status[id].energy_max = 1
         elseif task.TaskType == const.COUNTRY_NPC_TASK_TYPE.submit_arrow then
             data.npcs_status[id].energy = country_monster.get_archer_tower_arrow_num(task.ElementID)
+            if data.npcs_status[id].energy == nil then
+                flog("warn","imp_country_war.query_country_npc_info energy is nil,id "..id)
+                data.npcs_status[id].energy = 0
+            end
             data.npcs_status[id].energy_max = task.ItemMax[2]
         end
     end
