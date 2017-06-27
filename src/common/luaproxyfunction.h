@@ -308,7 +308,7 @@ static int lua_move_to(lua_State *L)
 	Point3D destPosition(x, y, z);
 	Point3D outPosition;
 
-	bool ret = p->WalkTo(destPosition, &outPosition);
+	bool ret = p->WalkTo(destPosition, outPosition);
 	if (!ret)
 	{
 		int a = 1;

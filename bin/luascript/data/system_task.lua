@@ -1,6 +1,12 @@
 -- This is generate by program !!!
 -- Don't change it manaully. 
+<<<<<<< .mine
 -- GenerateTime: '2017-06-21 16:39:04'
+||||||| .r21531
+-- GenerateTime: '2017-06-26 16:25:17'
+=======
+-- GenerateTime: '2017-06-27 16:53:11'
+>>>>>>> .r21536
 
 return { 
     ["CampExpReward"] = {
@@ -2234,7 +2240,7 @@ return {
             TaskGroup = 1001,
             Camp = 2,
             TaskName = 0,
-            TaskName1 = "奇门遁甲",
+            TaskName1 = "奇门遁甲-引",
             AbandonSign = 0,
             TaskSort = 2,
             TaskType = 14,
@@ -3784,7 +3790,7 @@ return {
             TaskGroup = 1003,
             Camp = 1,
             TaskName = 0,
-            TaskName1 = "奇门遁甲",
+            TaskName1 = "奇门遁甲-引",
             AbandonSign = 0,
             TaskSort = 2,
             TaskType = 14,
@@ -10870,7 +10876,7 @@ return {
             UnreceivedTaskDescription = 0,
             UnreceivedTaskDescription1 = "",
             TaskDialogue = 0,
-            TaskDialogue1 = "陈长生:少侠真是年少有为啊，其实小女一直对练武感兴趣，想要赶走村外作乱的狪狪兽，不过老朽实在不放心她一个人去，少侠你能和她一道，赶走那些妖怪吗？|self:放心吧，交给我。",
+            TaskDialogue1 = "陈长生:少侠真是年少有为啊，其实小女一直对练武感兴趣，想要赶走村外作乱的狪狪兽，不过老朽实在不放心她一个人去，少侠你能和她一道，赶走那些妖怪吗？",
             TaskDescription = 0,
             TaskDescription1 = "帮助族长女儿赶走村外作乱的妖怪",
             TaskTraceDescription = 0,
@@ -12180,7 +12186,7 @@ return {
             TaskSectionName = 0,
             TaskSectionName1 = "",
             TaskName = 0,
-            TaskName1 = "愤怒的女子",
+            TaskName1 = "神秘女子",
             ReceivedTaskDescription = 0,
             ReceivedTaskDescription1 = "向女子解释清楚",
             UnreceivedTaskDescription = 0,
@@ -15664,7 +15670,7 @@ return {
             UnreceivedTaskDescription = 0,
             UnreceivedTaskDescription1 = "",
             TaskDialogue = 0,
-            TaskDialogue1 = "神农:不知你是否愿意帮我去除掉这隐患……可能我强人所难了，不过这名为獜的妖兽自从从那深林里出来后就总躲在那赤水洞里。|self:能为民除害我非常乐意。",
+            TaskDialogue1 = "神农:不知你是否愿意帮我去除掉这隐患……可能我强人所难了，不过这名为獜的妖兽自从从那深林里出来后就一直躲在赤水洞中。",
             TaskDescription = 0,
             TaskDescription1 = "替神农夺回被獜抢走的避水珠",
             TaskTraceDescription = 0,
@@ -19495,7 +19501,7 @@ return {
             UnreceivedTaskDescription = 0,
             UnreceivedTaskDescription1 = "",
             TaskDialogue = 0,
-            TaskDialogue1 = "陈长生:少侠真是年少有为啊，其实小女一直对练武感兴趣，想要赶走村外作乱的狪狪兽，不过老朽实在不放心她一个人去，少侠你能和她一道，赶走那些妖怪吗？|self:放心吧，交给我。",
+            TaskDialogue1 = "陈长生:少侠真是年少有为啊，其实小女一直对练武感兴趣，想要赶走村外作乱的狪狪兽，不过老朽实在不放心她一个人去，少侠你能和她一道，赶走那些妖怪吗？",
             TaskDescription = 0,
             TaskDescription1 = "帮助族长女儿赶走村外作乱的妖怪",
             TaskTraceDescription = 0,
@@ -24289,7 +24295,7 @@ return {
             UnreceivedTaskDescription = 0,
             UnreceivedTaskDescription1 = "",
             TaskDialogue = 0,
-            TaskDialogue1 = "神农:不知你是否愿意帮我去除掉这隐患……可能我强人所难了，不过这名为獜的妖兽自从从那深林里出来后就总躲在那赤水洞里。|self:能为民除害我非常乐意。",
+            TaskDialogue1 = "神农:不知你是否愿意帮我去除掉这隐患……可能我强人所难了，不过这名为獜的妖兽自从从那深林里出来后就一直躲在赤水洞中。",
             TaskDescription = 0,
             TaskDescription1 = "替神农夺回被獜抢走的避水珠",
             TaskTraceDescription = 0,
