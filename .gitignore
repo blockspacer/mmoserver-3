@@ -8,3 +8,9 @@ bin/luascript/md5/md5_123.lua
 bin/luascript/md5/md5_124.lua
 bin/luascript/.idea/
 bin/stable/
+_obj
+Debug
+lib
+*pdb
+*ilk
+bin/logs

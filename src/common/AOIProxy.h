@@ -82,7 +82,7 @@ public:
 
 	int EntityType();
 
-	bool WalkTo(Point3D& destPosition, Point3D* outPostion);
+	bool WalkTo(Point3D& destPosition, Point3D& outPostion);
 	
 	void MoveToDirectly(Point3D& destPosition);
 
