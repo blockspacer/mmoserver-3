@@ -10,9 +10,6 @@ local common_fight_base = require "data/common_fight_base"
 local flog = require "basic/log"
 
 local attributes = {}
-for key,attribute in pairs(common_fight_base.Attribute) do
-    attributes[key] = attribute
-end
 
 local function get_monster_attribute(key)
     return attributes[key]
@@ -23,10 +20,6 @@ local function get_monster_move_speed()
 end
 
 local rebirth_index = {}
-for i, v in ipairs(common_fight_base.Revive) do
-    rebirth_index[v.Rebirthtype] = rebirth_index[v.Rebirthtype] or {}
-    table.insert(rebirth_index[v.Rebirthtype], {index = i, lv = v.LowerLimit})
-end
 
 local function get_index_from_rebirth_times(type, times)
     local type_index = rebirth_index[type]
@@ -58,9 +51,6 @@ local function get_rebirth_config(rebirth_type,times)
 end
 
 local boss_animation = {}
-for _,v in pairs(common_fight_base.BossAnimation) do
-    boss_animation[v.ID] = v
-end
 local function get_boss_animation_config(animation_id)
     return boss_animation[animation_id]
 end
@@ -69,10 +59,30 @@ local function get_pet_rebirth_time()
     return common_fight_base.Parameter[62].Value
 end
 
+local function reload()
+    attributes = {}
+    for key,attribute in pairs(common_fight_base.Attribute) do
+        attributes[key] = attribute
+    end
+
+    rebirth_index = {}
+    for i, v in ipairs(common_fight_base.Revive) do
+        rebirth_index[v.Rebirthtype] = rebirth_index[v.Rebirthtype] or {}
+        table.insert(rebirth_index[v.Rebirthtype], {index = i, lv = v.LowerLimit})
+    end
+
+    boss_animation = {}
+    for _,v in pairs(common_fight_base.BossAnimation) do
+        boss_animation[v.ID] = v
+    end
+end
+reload()
+
 return{
     get_monster_attribute = get_monster_attribute,
     get_monster_move_speed = get_monster_move_speed,
     get_rebirth_config = get_rebirth_config,
     get_boss_animation_config = get_boss_animation_config,
     get_pet_rebirth_time = get_pet_rebirth_time,
+    reload = reload,
 }

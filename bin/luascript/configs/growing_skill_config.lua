@@ -10,14 +10,19 @@ local growing_skill = require "data/growing_skill"
 
 local buff_configs = {}
 
-for _,v in pairs(growing_skill.Buff) do
-    buff_configs[v.ID] = v
-end
-
 local function get_buff_config(buff_id)
     return buff_configs[buff_id]
 end
 
+local function reload()
+    buff_configs = {}
+    for _,v in pairs(growing_skill.Buff) do
+        buff_configs[v.ID] = v
+    end
+end
+reload()
+
 return {
     get_buff_config = get_buff_config,
+    reload = reload,
 }

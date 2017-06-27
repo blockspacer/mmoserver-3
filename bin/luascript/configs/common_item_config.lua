@@ -11,12 +11,6 @@ local flog = require "basic/log"
 local common_char_chinese_config = require "configs/common_char_chinese_config"
 
 local item_configs = {}
-for _,v in pairs(common_item.Item) do
-    if v.OverlayNum < 1 then
-        flog("error","item config error!!! OverlayNum is "..v.OverlayNum..",id "..v.ID)
-    end
-    item_configs[v.ID] = v
-end
 
 local function get_item_config(id)
     return item_configs[id]
@@ -27,12 +21,6 @@ local function get_item_configs()
 end
 
 local rand_package_configs = {}
-for _,v in pairs(common_item.RandBag) do
-    if rand_package_configs[v.RandID] == nil then
-        rand_package_configs[v.RandID] = {}
-    end
-    table.insert(rand_package_configs[v.RandID],v)
-end
 
 local function get_rand_item_configs(rand_item_id)
     return rand_package_configs[rand_item_id]
@@ -48,10 +36,31 @@ local function get_item_name(id)
     return item_configs[id].Name1
 end
 
+local function reload()
+    item_configs = {}
+    for _,v in pairs(common_item.Item) do
+        if v.OverlayNum < 1 then
+            flog("error","item config error!!! OverlayNum is "..v.OverlayNum..",id "..v.ID)
+        end
+        item_configs[v.ID] = v
+    end
+
+    rand_package_configs = {}
+    for _,v in pairs(common_item.RandBag) do
+        if rand_package_configs[v.RandID] == nil then
+            rand_package_configs[v.RandID] = {}
+        end
+        table.insert(rand_package_configs[v.RandID],v)
+    end
+
+end
+reload()
+
 return {
     get_item_config = get_item_config,
     get_item_configs = get_item_configs,
     get_rand_item_configs = get_rand_item_configs,
     get_item_name = get_item_name,
+    reload = reload,
 }
 

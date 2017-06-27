@@ -12,19 +12,10 @@ local parameter = system_friends_chat.Parameter
 
 
 local mail_time_limit = 30
-if parameter[17] ~= nil then
-    mail_time_limit = parameter[17].Value
-end
 
 local mail_count_limit = 50
-if parameter[16] ~= nil then
-    mail_count_limit = parameter[16].Value
-end
 
 local mail_configs = {}
-for _,v in pairs(system_friends_chat.Mail) do
-    mail_configs[v.ID] = v
-end
 
 local function get_mail_time_limit()
     return mail_time_limit*86400
@@ -72,9 +63,6 @@ local function get_mail_name(id)
 end
 
 local system_message_configs = {}
-for _,v in pairs(system_friends_chat.SystemMessage) do
-    system_message_configs[v.ID] = v
-end
 
 local function get_system_message_config(id)
     return system_message_configs[id]
@@ -95,7 +83,31 @@ local function get_chat_nearby_distance()
     return parameter[14].Value
 end
 
+local function reload()
+    mail_time_limit = 30
+    if parameter[17] ~= nil then
+        mail_time_limit = parameter[17].Value
+    end
+
+    mail_count_limit = 50
+    if parameter[16] ~= nil then
+        mail_count_limit = parameter[16].Value
+    end
+
+    mail_configs = {}
+    for _,v in pairs(system_friends_chat.Mail) do
+        mail_configs[v.ID] = v
+    end
+
+    system_message_configs = {}
+    for _,v in pairs(system_friends_chat.SystemMessage) do
+        system_message_configs[v.ID] = v
+    end
+end
+reload()
+
 return {
+    reload = reload,
     get_mail_time_limit = get_mail_time_limit,
     get_mail_max_count = get_mail_max_count,
     get_mail_config = get_mail_config,

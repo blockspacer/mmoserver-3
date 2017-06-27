@@ -8,15 +8,21 @@
 local common_level = require "data/common_levels"
 
 local levels = {}
-for _,level in pairs(common_level.Level) do
-    levels[level.Level] = level
-end
 
 local function get_level_config(level)
     return levels[level]
 end
 
+local function reload()
+    levels = {}
+    for _,level in pairs(common_level.Level) do
+        levels[level.Level] = level
+    end
+end
+reload()
+
 return{
     get_level_config = get_level_config,
+    reload = reload,
 }
 
