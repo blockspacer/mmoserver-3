@@ -36,6 +36,7 @@ public:
 	void GetPath(const int nResourceId, const float cx, const float cy, const float cz, const float tx, const float ty, const float tz, std::vector<float> &path);
 	void InitScenesDetour(const std::vector<int> &scenes);
 	void RobotMove(const int nRobotId,const uint32_t nSceneId,const std::string strEntityId,const float x,const float y,const float z,const float orientation,const float speed);
+	void RobotStopMove(const int nRobotId, const uint32_t nSceneId, const std::string strEntityId, const float x, const float y, const float z, const float orientation, const float speed);
 	void SyncTime(const int nRobotId);
 	void SendPingMessage(const int nRobotId, const uint64_t lClientTime);
 	void SendPingBackMessage(const int nRobotId, const long lServerTime, const long lClientTime);

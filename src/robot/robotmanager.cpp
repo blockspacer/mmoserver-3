@@ -3,6 +3,7 @@
 #include "RobotLuaFunction.h"
 #include "Timer.h"
 #include "robotheartbeat.h"
+#include <thread>
 #define _PRESS
 
 RobotManager::RobotManager(std::string strServerName):m_strServerName(strServerName)
@@ -244,6 +245,7 @@ void RobotManager::OnMessage(const int sock, const char* data, const DATA_LENGTH
 			input[8] = pEntity->entitypos().speed();
 			LuaModule::Instance()->RunFunction("OnAOIAdd", input, 9, nullptr, 0);
 		}
+		break;
 	}
 	case  SERVER_MESSAGE_OPCODE_DESTROY_ENTITY:
 	{
@@ -263,6 +265,7 @@ void RobotManager::OnMessage(const int sock, const char* data, const DATA_LENGTH
 			input[2] = message.mutable_entitiesdestroy(i);
 			LuaModule::Instance()->RunFunction("OnAOIDel", input, 3, nullptr, 0);
 		}
+		break;
 	}
 	case SERVER_MESSAGE_OPCODE_MOVE:
 	{
@@ -284,6 +287,7 @@ void RobotManager::OnMessage(const int sock, const char* data, const DATA_LENGTH
 		input[7] = positon->orientation();
 		input[8] = positon->speed();
 		LuaModule::Instance()->RunFunction("OnAOIMove", input, 9, nullptr, 0);
+		break;
 	}
 	case  SERVER_MESSAGE_OPCODE_STOP_MOVE:
 	{
@@ -309,6 +313,7 @@ void RobotManager::OnMessage(const int sock, const char* data, const DATA_LENGTH
 			input[8] = positon->speed();
 			LuaModule::Instance()->RunFunction("OnAOIStopMove", input, 9, nullptr, 0);
 		}		
+		break;
 	}
 	case SERVER_MESSAGE_FORCE_POSITION:
 	{
@@ -326,6 +331,7 @@ void RobotManager::OnMessage(const int sock, const char* data, const DATA_LENGTH
 		input[4] = message.desty();
 		input[5] = message.destz();
 		LuaModule::Instance()->RunFunction("OnAOIForcePosition", input, 6, nullptr, 0);
+		break;
 	}
 	case SERVER_MESSAGE_OPCODE_TURN_DIRECTION:
 	{
@@ -344,6 +350,7 @@ void RobotManager::OnMessage(const int sock, const char* data, const DATA_LENGTH
 		input[5] = message.destz();
 		input[6] = message.direction();
 		LuaModule::Instance()->RunFunction("OnAOITurnDirection", input, 7, nullptr, 0);
+		break;
 	}
 	default:
 		break;
@@ -413,6 +420,7 @@ void RobotManager::Tick()
 void RobotManager::Run()
 {
 	Tick();
+	//std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
 
 void RobotManager::UpdateRobot(Robot& robot)
@@ -541,6 +549,21 @@ void RobotManager::RobotMove(const int nRobotId,const uint32_t nSceneId, const s
 	message.set_sceneid(nSceneId);
 	message.set_clienttime(GetNowTimeMille());
 	SendMessageToServer(nRobotId, CLIENT_MESSAGE_OPCODE_MOVE, &message);	
+}
+
+void RobotManager::RobotStopMove(const int nRobotId, const uint32_t nSceneId, const std::string strEntityId, const float x, const float y, const float z, const float orientation, const float speed)
+{
+	CS_STOP_MOVE message;
+	Position* pos = message.mutable_mypostion();
+	pos->set_destx(x);
+	pos->set_desty(y);
+	pos->set_destz(z);
+	pos->set_entityid(strEntityId);
+	pos->set_orientation(orientation);
+	pos->set_speed(speed);
+	message.set_sceneid(nSceneId);
+	message.set_clienttime(GetNowTimeMille());
+	SendMessageToServer(nRobotId, CLIENT_MESSAGE_OPCODE_STOP_MOVE, &message);
 }
 
 void RobotManager::SyncTime(const int nRobotId)

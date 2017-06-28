@@ -96,8 +96,24 @@ static int lua_robot_move(lua_State *L)
 	float y = luaL_checknumber(L, 5);
 	float z = luaL_checknumber(L, 6);
 	float orientation = luaL_checknumber(L, 7);
-	float speed = luaL_checknumber(L,7);
+	float speed = luaL_checknumber(L,8);
 	GlobalRobotManager->RobotMove(nRobotId,nSceneId, cEntityId, x, y, z, orientation, speed);
+	return 0;
+}
+
+static int lua_robot_stop_move(lua_State *L)
+{
+	int nRobotId = luaL_checknumber(L, 1);
+	uint32_t nSceneId = luaL_checknumber(L, 2);
+	size_t n;
+	const char* cEntityId = luaL_checklstring(L, 3, &n);
+	std::string strEntityId(cEntityId, n);
+	float x = luaL_checknumber(L, 4);
+	float y = luaL_checknumber(L, 5);
+	float z = luaL_checknumber(L, 6);
+	float orientation = luaL_checknumber(L, 7);
+	float speed = luaL_checknumber(L, 8);
+	GlobalRobotManager->RobotStopMove(nRobotId, nSceneId, cEntityId, x, y, z, orientation, speed);
 	return 0;
 }
 
@@ -139,6 +155,7 @@ extern "C" void luaopen_robotfunction(lua_State* L)
 	lua_register(L, "_get_path", lua_get_path);
 	lua_register(L, "_init_scene_detour", lua_init_scene_detour);
 	lua_register(L, "_robot_move", lua_robot_move);
+	lua_register(L, "_robot_stop_move", lua_robot_stop_move);
 	lua_register(L, "_sync_time", lua_sync_time);
 	lua_register(L, "_send_ping_message", lua_send_ping_message);
 	lua_register(L, "_send_ping_back_message", lua_send_ping_back_message);
