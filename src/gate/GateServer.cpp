@@ -102,28 +102,29 @@ bool GateServer::Run()
 	switch (m_serverState)
 	{
 	case SERVER_STATE_CREATE:
-		return InitClient();
+		InitClient();
 		break;
 	case SERVER_STATE_INIT:
-		return OnServerState();
+		OnServerState();
 		break;
 	case SERVER_STATE_RUN:
-		return Tick();
+		Tick();
 		break;
 	case SERVER_STATE_STOP:
-		return OnServerStop();
+		OnServerStop();
 		break;
 	case SERVER_STATE_STOPING:
-		return Tick();
+		Tick();
 		break;
 	case SERVER_STATE_FINISH:
 		Tick();
-		return OnServerClose();
+		OnServerClose();
 		break;
 	default:
-		return false;
+		break;
 	}
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    return false;
 }
 
 bool GateServer::Tick()
