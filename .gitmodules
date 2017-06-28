@@ -1,3 +1,6 @@
 [submodule "bin/luascript/Common"]
 	path = bin/luascript/Common
 	url = https://github.com/houontherun/common.git
+[submodule "bin/luascript/data2"]
+	path = bin/luascript/data2
+	url = https://github.com/houontherun/data.git
