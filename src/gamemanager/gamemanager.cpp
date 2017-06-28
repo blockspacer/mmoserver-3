@@ -56,24 +56,25 @@ bool GameManager::Run()
 	switch (m_serverState)
 	{
 	case SERVER_STATE_CREATE:
-		return OnServerCreate();
+		OnServerCreate();
 		break;
 	case SERVER_STATE_INIT:
-		return OnServerStart();
+		OnServerStart();
 		break;
 	case SERVER_STATE_RUN:
-		return Tick();
+		Tick();
 		break;
 	case SERVER_STATE_STOP:
-		return OnServerStop();
+		OnServerStop();
 		break;
 	case SERVER_STATE_FINISH:
-		return OnServerClose();
+		OnServerClose();
 		break;
 	default:
-		return false;
+		break;
 	}
 	std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    return false;
 }
 
 bool GameManager::OnServerCreate()
