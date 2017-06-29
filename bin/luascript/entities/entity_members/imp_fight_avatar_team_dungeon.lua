@@ -58,14 +58,14 @@ function imp_fight_avatar_team_dungeon.on_connect_team_dungeon_server(self)
     if is_member == true then
         local aoi_scene_id = team_dungeon_center:get_team_dungeon_aoi_scene_id(self.fight_id)
         if aoi_scene_id == nil then
-            flog("tmlDebug","imp_fight_avatar_team_dungeon.on_connect_team_dungeon_server aoi_scene_id == nil")
+            flog("warn","imp_fight_avatar_team_dungeon.on_connect_team_dungeon_server aoi_scene_id == nil")
             reply_data.result = const.error_team_dungeon_can_not_find_scene
             self:send_message(const.DC_MESSAGE_LUA_GAME_RPC,reply_data)
             return
         end
         local scene = team_dungeon_scene_manager.find_scene(aoi_scene_id)
         if scene == nil then
-            flog("tmlDebug","imp_fight_avatar_team_dungeon.on_connect_team_dungeon_server scene == nil")
+            flog("warn","imp_fight_avatar_team_dungeon.on_connect_team_dungeon_server scene == nil")
             reply_data.result = const.error_team_dungeon_can_not_find_scene
             self:send_message(const.DC_MESSAGE_LUA_GAME_RPC,reply_data)
             return
