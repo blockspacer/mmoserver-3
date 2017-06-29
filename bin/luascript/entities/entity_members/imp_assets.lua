@@ -542,6 +542,8 @@ function imp_assets.remove_item_by_id(self, item_id, count)
             flog("salog", string_format("Item %d remove %d", item_id, count), self.actor_id)
         end
     end
+    --更新任务信息
+    self:update_task_collect()
 end
 
 function imp_assets.add_item_by_id(self, item_id, count)

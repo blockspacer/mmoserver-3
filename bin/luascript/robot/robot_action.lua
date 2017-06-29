@@ -120,10 +120,10 @@ local function stop_move(self)
 end
 
 local function sync_move(self)
-    if _get_now_time_mille() - self.last_move_message_time > move_msg_interval  or math.abs(self.direction - self.last_direction) > 0.01 then
+    if _get_now_time_mille() - self.last_move_message_time > move_msg_interval  or math.abs(self.direction - self.last_direction) > 0.015 then
         self.last_move_message_time = _get_now_time_mille()
         self.last_direction = self.direction
-        flog.log("tmlDebug","sync_move (%f,%f.%f) time %s",self.x,self.y,self.z,self.last_move_message_time)
+        flog.log("tmlDebug","sync_move robot_id %d (%f,%f.%f) time %s",self.robot_id,self.x,self.y,self.z,self.last_move_message_time)
         _robot_move(self.robot_id,self.aoi_scene_id,self.entity_id,self.x,self.y,self.z,self.direction,self.speed)
     end
 end
