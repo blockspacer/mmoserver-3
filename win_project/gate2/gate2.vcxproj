@@ -26,13 +26,11 @@
     <ClCompile Include="..\..\src\gate\GateLuaModule.cpp" />
     <ClCompile Include="..\..\src\gate\GateServer.cpp" />
     <ClCompile Include="..\..\src\gate\GateServerModule.cpp" />
-    <ClCompile Include="..\..\src\gate\GateServerNetModule.cpp" />
     <ClCompile Include="..\..\src\gate\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gate\BaseGateServerModule.h" />
     <ClInclude Include="..\..\src\gate\BattleProxyModule.h" />
-    <ClInclude Include="..\..\src\gate\clientproxy.h" />
     <ClInclude Include="..\..\src\gate\FightServerModule.h" />
     <ClInclude Include="..\..\src\gate\GameClientModule.h" />
     <ClInclude Include="..\..\src\gate\GateLuaFunction.h" />
@@ -42,7 +40,6 @@
     <ClInclude Include="..\..\src\gate\IGameClientModule.h" />
     <ClInclude Include="..\..\src\gate\IGateServer.h" />
     <ClInclude Include="..\..\src\gate\IGateServerModule.h" />
-    <ClInclude Include="..\..\src\gate\LuaFunction.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\gate\Makefile" />

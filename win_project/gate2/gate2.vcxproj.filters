@@ -36,9 +36,6 @@
     <ClCompile Include="..\..\src\gate\GateServerModule.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\gate\GateServerNetModule.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\gate\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -48,9 +45,6 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\gate\BattleProxyModule.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\gate\clientproxy.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\gate\FightServerModule.h">
@@ -78,9 +72,6 @@
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\gate\IGateServerModule.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\gate\LuaFunction.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
