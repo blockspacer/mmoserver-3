@@ -433,7 +433,7 @@ local function _set_target(team_id, target, min_level, max_level)
     end
     local result, team_info = team_factory.set_team_target(team_id, target, min_level, max_level)
     if result ~= 0 then
-        flog("error", "_set_target fail "..result)
+        --flog("error", "_set_target fail "..result)
         return result
     end
     send_to_all_member_client(team.members, const.SC_MESSAGE_LUA_GAME_RPC, {func_name = "TargetChanged", target=target, team_info = team_info})
@@ -968,9 +968,16 @@ function team_player.ensure_enter_dungeon(self, input)
         team:clear_waiting_state()
 
         if team.new_target ~= nil then
-            _set_target(team_id, team.new_target)
+            local result = _set_target(team_id, team.new_target)
+            if result == 0 then
+                _start_team_dungeon(team_id, self.session_id)
+            else
+                send_to_client(self.session_id, const.SC_MESSAGE_LUA_GAME_RPC, {result = result, func_name = "EnterTeamDungeonRet"})
+            end
+        else
+            _start_team_dungeon(team_id, self.session_id)
         end
-        _start_team_dungeon(team_id, self.session_id)
+
         team.in_dungeon = true
     end
 end
