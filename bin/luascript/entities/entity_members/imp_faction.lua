@@ -94,7 +94,7 @@ function imp_faction.imp_faction_init_from_other_game_dict(self,dict)
     self.faction_altar_share_spritual = dict.faction_altar_share_spritual
 end
 
-function imp_faction.imp_faction_write_to_dict(self, dict)
+function imp_faction.imp_faction_write_to_dict(self, dict, to_other_game)
     if self.apply_num_refresher ~= nil then
         local rst, last_refresh_time = self.apply_num_refresher:check_refresh(self)
         if rst == false then
@@ -107,15 +107,21 @@ function imp_faction.imp_faction_write_to_dict(self, dict)
             dict.last_refresh_investment_count_time = last_refresh_investment_count_time
         end
     end
-    for i, v in pairs(params) do
-        if v.db then
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
 end
 
 function imp_faction.imp_faction_write_to_other_game_dict(self,dict)
-    self:imp_faction_write_to_dict(dict)
+    self:imp_faction_write_to_dict(dict, true)
     dict.faction_scene_gameid = self.faction_scene_gameid
     dict.faction_building_investment = self.faction_building_investment
     dict.faction_altar_share_spritual = self.faction_altar_share_spritual

@@ -1665,6 +1665,16 @@ end
 
 
 function imp_equipment.imp_equipment_init_from_dict(self, dict)
+    for i, v in pairs(params) do
+        if dict[i] ~= nil then
+            self[i] = dict[i]
+        elseif v.default ~= nil then
+            self[i] = v.default
+        else
+            self[i] = 0
+        end
+    end
+
     local equip_info = table.get(dict, "equipments", {})
     for i, v in pairs(equip_name_to_type) do
         if equip_info[i] ~= nil then
@@ -1715,7 +1725,19 @@ function imp_equipment.imp_equipment_init_from_other_game_dict(self,dict)
     self:imp_equipment_init_from_dict(self,dict)
 end
 
-function imp_equipment.imp_equipment_write_to_dict(self, dict)
+function imp_equipment.imp_equipment_write_to_dict(self, dict, to_other_game)
+    if to_other_game then
+        for i, _ in pairs(params) do
+            dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
+        end
+    end
+
     dict.equipments = {}
     for i, v in pairs(equip_name_to_type) do
         --flog("error", "imp_equipment_write_to_dict: v "..v)
@@ -1751,7 +1773,7 @@ function imp_equipment.imp_equipment_write_to_dict(self, dict)
 end
 
 function imp_equipment.imp_equipment_write_to_other_game_dict(self,dict)
-    self:imp_equipment_write_to_dict(dict)
+    self:imp_equipment_write_to_dict(dict, true)
 end
 
 function imp_equipment.imp_equipment_write_to_sync_dict(self, dict)

@@ -331,20 +331,26 @@ function imp_assets.imp_assets_init_from_other_game_dict(self,dict)
     self:imp_assets_init_from_dict(dict)
 end
 
-function imp_assets.imp_assets_write_to_dict(self, dict)
+function imp_assets.imp_assets_write_to_dict(self, dict, to_other_game)
     _calc_tili(self)
     self.assets_refresher:check_refresh(self)
-    for i, v in pairs(params) do
-        if v.db then
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
     self.inventory:write_to_dict(dict)
     dict.assets_last_refresh_time = self.assets_refresher:get_last_refresh_time()
 end
 
-function imp_assets.imp_assets_write_to_other_game_dict(self,dict)
-    self:imp_assets_write_to_dict(dict)
+function imp_assets.imp_assets_write_to_other_game_dict(self, dict)
+    self:imp_assets_write_to_dict(dict, true)
 end
 
 function imp_assets.imp_assets_write_to_sync_dict(self, dict, only_res)

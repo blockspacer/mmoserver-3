@@ -163,11 +163,17 @@ function imp_country_war.imp_country_war_init_from_other_game_dict(self,dict)
     self.hatred_list = dict.hatred_list
 end
 
-function imp_country_war.imp_country_war_write_to_dict(self, dict)
+function imp_country_war.imp_country_war_write_to_dict(self, dict, to_other_game)
     _check_data_effective(self)
-    for i, v in pairs(params) do
-        if v.db then
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
     dict.country_war_task = table.copy(self.country_war_task)
@@ -177,7 +183,7 @@ function imp_country_war.imp_country_war_write_to_dict(self, dict)
 end
 
 function imp_country_war.imp_country_war_write_to_other_game_dict(self,dict)
-    self:imp_country_war_write_to_dict(dict)
+    self:imp_country_war_write_to_dict(dict, true)
 
     dict.hatred_list = self.hatred_list
 end

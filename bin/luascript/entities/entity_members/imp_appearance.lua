@@ -14,6 +14,7 @@ local APPEARANCE_TYPE_TO_NAME = const.APPEARANCE_TYPE_TO_NAME
 local ONE_DAY_SECONDS = 86400
 local TIME_FOREVER = const.TIME_FOREVER
 local DYE_ITEM_ID = 4155
+local PART_ID_INDEX_DIFF = 900
 
 local params = {
 }
@@ -53,10 +54,16 @@ function imp_appearance.imp_appearance_init_from_other_game_dict(self,dict)
     self:imp_appearance_init_from_dict(dict)
 end
 
-function imp_appearance.imp_appearance_write_to_dict(self, dict)
-    for i, v in pairs(params) do
-        if v.db then
+function imp_appearance.imp_appearance_write_to_dict(self, dict, to_other_game)
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
     dict.appearance = self.appearance
@@ -64,7 +71,7 @@ function imp_appearance.imp_appearance_write_to_dict(self, dict)
 end
 
 function imp_appearance.imp_appearance_write_to_other_game_dict(self,dict)
-    self:imp_appearance_write_to_dict(dict)
+    self:imp_appearance_write_to_dict(dict, true)
 end
 
 function imp_appearance.imp_appearance_write_to_sync_dict(self, dict)
@@ -78,7 +85,7 @@ function imp_appearance.imp_appearance_write_to_sync_dict(self, dict)
 end
 
 function imp_appearance.get_appearance_aoi_index(part_id)
-    return part_id - 900
+    return part_id - PART_ID_INDEX_DIFF
 end
 
 local function _get_init_fashion(self)

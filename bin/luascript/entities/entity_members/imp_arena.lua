@@ -203,16 +203,22 @@ function imp_arena.imp_arena_init_from_other_game_dict(self,dict)
     self.grade_id = dict.grade_id
 end
 
-function imp_arena.imp_arena_write_to_dict(self,dict)
+function imp_arena.imp_arena_write_to_dict(self, dict, to_other_game)
     if self.in_fight_server and self.fight_type == const.FIGHT_SERVER_TYPE.QUALIFYING_ARENA then
         self.next_fight_time = _get_now_time_second() + math.floor(arena_parameter[3].Value[1]/1000)
     end
 
     self.arena_refresher:check_refresh(self)
     dict.arena_info = {}
-    for i, v in pairs(params) do
-        if v.db then
-            dict.arena_info[i] = self[i]
+    if to_other_game then
+        for i, _ in pairs(params) do
+            dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
 
@@ -223,8 +229,8 @@ function imp_arena.imp_arena_write_to_dict(self,dict)
     dict.arena_info.arena_dogfight_ban_time = self.arena_dogfight_ban_time
 end
 
-function imp_arena.imp_arena_write_to_other_game_dict(self,dict)
-    self:imp_arena_write_to_dict(dict)
+function imp_arena.imp_arena_write_to_other_game_dict(self, dict)
+    self:imp_arena_write_to_dict(dict, true)
     dict.qualifying_score = self.qualifying_score
     dict.dogfight_score = self.dogfight_score
     dict.total_score = self.total_score

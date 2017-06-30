@@ -645,20 +645,22 @@ function imp_player.imp_player_init_from_other_game_dict(self,dict)
     self:imp_player_init_from_dict(dict)
 end
 
-function imp_player.imp_player_write_to_dict(self, dict)
+function imp_player.imp_player_write_to_dict(self, dict, to_other_game)
     self.offlinetime = _get_now_time_second()
-    for i, v in pairs(params) do
-        if v.db then
-            if i == "posX" or i == "posY" or i == "posZ" then
-                if self[i] ~= nil then
-                    local pos = math.ceil(self[i]*100)
-                    dict[i] = pos
-                end
-            else
+
+    if to_other_game then
+        for i, _ in pairs(params) do
+            dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
                 dict[i] = self[i]
             end
         end
     end
+    dict.posX, dict.posY, dict.posZ = self.pos_to_client(self.posX, self.posY, self.posZ)
+
     self:write_client_config(dict)
     if self.immortal_data ~= nil then
         dict.immortal_data = table.copy(self.immortal_data)
@@ -667,7 +669,7 @@ function imp_player.imp_player_write_to_dict(self, dict)
 end
 
 function imp_player.imp_player_write_to_other_game_dict(self,dict)
-    self:imp_player_write_to_dict(dict)
+    self:imp_player_write_to_dict(dict, true)
 end
 
 function imp_player.imp_player_write_to_sync_dict(self, dict)

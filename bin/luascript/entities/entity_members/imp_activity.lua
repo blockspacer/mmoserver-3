@@ -175,12 +175,18 @@ function imp_activity.imp_activity_init_from_other_game_dict(self,dict)
     self:imp_activity_init_from_dict(dict)
 end
 
-function imp_activity.imp_activity_write_to_dict(self, dict)
+function imp_activity.imp_activity_write_to_dict(self, dict, to_other_game)
     self.activity_daily_refresher:check_refresh(self)
     self.activity_weekly_refresher:check_refresh(self)
-    for i, v in pairs(params) do
-        if v.db then
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
 
@@ -191,7 +197,7 @@ function imp_activity.imp_activity_write_to_dict(self, dict)
 end
 
 function imp_activity.imp_activity_write_to_other_game_dict(self,dict)
-    self:imp_activity_write_to_dict(dict)
+    self:imp_activity_write_to_dict(dict, true)
 end
 
 function imp_activity.imp_activity_write_to_sync_dict(self, dict)

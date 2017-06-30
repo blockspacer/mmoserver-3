@@ -128,19 +128,29 @@ function imp_property.imp_property_init_from_other_game_dict(self,dict)
     self.total_power = dict.total_power
 end
 
-function imp_property.imp_property_write_to_dict(self, dict)
+function imp_property.imp_property_write_to_dict(self, dict, to_other_game)
     dict.property = {}
-    for i, v in pairs(params) do
-        if v.db then
-            dict[i] = self[i]
-        elseif v.intable then
-            dict.property[name_to_index[i]] = self[i]
+    if to_other_game then
+        for i, v in pairs(params) do
+            if v.intable then
+                dict.property[name_to_index[i]] = self[i]
+            else
+                dict[i] = self[i]
+            end
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            elseif v.intable then
+                dict.property[name_to_index[i]] = self[i]
+            end
         end
     end
 end
 
 function imp_property.imp_property_write_to_other_game_dict(self,dict)
-    self:imp_property_write_to_dict(dict)
+    self:imp_property_write_to_dict(dict, true)
     dict.total_power = self.total_power
 end
 

@@ -155,19 +155,24 @@ function imp_teamup.imp_teamup_init_from_other_game_dict(self,dict)
     self.team_members = table.copy(dict.team_members)
 end
 
-function imp_teamup.imp_teamup_write_to_dict(self, dict)
-    for i, v in pairs(params) do
-        if v.db then
+function imp_teamup.imp_teamup_write_to_dict(self, dict, to_other_game)
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
 end
 
 function imp_teamup.imp_teamup_write_to_other_game_dict(self,dict)
-    self:imp_teamup_write_to_dict(dict)
-    dict.team_state = self.team_state
-    dict.apply_team_list = table.copy(self.apply_team_list)
-    dict.team_members = table.copy(self.team_members)
+    self:imp_teamup_write_to_dict(dict, true)
+    dict.apply_team_list = self.apply_team_list
+    dict.team_members = self.team_members
 end
 
 function imp_teamup.imp_teamup_write_to_sync_dict(self, dict)

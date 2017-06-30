@@ -558,12 +558,18 @@ function imp_task.imp_task_init_from_other_game_dict(self,dict)
     self:imp_task_init_from_dict(dict)
 end
 
-function imp_task.imp_task_write_to_dict(self, dict)
+function imp_task.imp_task_write_to_dict(self, dict, to_other_game)
     self.daily_cycle_task_refresher:check_refresh(self)
     dict.task = {}
-    for i, v in pairs(params) do
-        if v.db then
-            dict.task[i] = self[i]
+    if to_other_game then
+        for i, _ in pairs(params) do
+            dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
     dict.task.task_list = table.copy(self.task_list)
@@ -573,7 +579,7 @@ function imp_task.imp_task_write_to_dict(self, dict)
 end
 
 function imp_task.imp_task_write_to_other_game_dict(self,dict)
-    self:imp_task_write_to_dict(dict)
+    self:imp_task_write_to_dict(dict, true)
 end
 
 function imp_task.imp_task_write_to_sync_dict(self, dict)

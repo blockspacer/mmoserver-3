@@ -841,11 +841,17 @@ function imp_seal.imp_seal_init_from_other_game_dict(self,dict)
     self:imp_seal_init_from_dict(dict)
 end
 
-function imp_seal.imp_seal_write_to_dict(self, dict)
+function imp_seal.imp_seal_write_to_dict(self, dict, to_other_game)
     _calc_capture_energy(self)
-    for i, v in pairs(params) do
-        if v.db then
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
 
@@ -869,7 +875,7 @@ function imp_seal.imp_seal_write_to_dict(self, dict)
 end
 
 function imp_seal.imp_seal_write_to_other_game_dict(self,dict)
-    self:imp_seal_write_to_dict(dict)
+    self:imp_seal_write_to_dict(dict, true)
 end
 
 function imp_seal.imp_seal_write_to_sync_dict(self, dict, no_pet)

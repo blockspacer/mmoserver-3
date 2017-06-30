@@ -53,18 +53,24 @@ function imp_skill.imp_skill_init_from_other_game_dict(self,dict)
     self:imp_skill_init_from_dict(dict)
 end
 
-function imp_skill.imp_skill_write_to_dict(self, dict)
-    for i, v in pairs(params) do
-        if v.db then
+function imp_skill.imp_skill_write_to_dict(self, dict, to_other_game)
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
         end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
+        end
     end
-    dict.skill_level = table.copy(self.skill_level)
-    dict.skill_plan = table.copy(self.skill_plan)
+    dict.skill_level = self.skill_level
+    dict.skill_plan = self.skill_plan
 end
 
 function imp_skill.imp_skill_write_to_other_game_dict(self,dict)
-    self:imp_skill_write_to_dict(dict)
+    self:imp_skill_write_to_dict(dict, true)
 end
 
 function imp_skill.imp_skill_write_to_sync_dict(self, dict)

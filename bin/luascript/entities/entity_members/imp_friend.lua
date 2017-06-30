@@ -122,16 +122,22 @@ function imp_friend.imp_friend_init_from_other_game_dict(self,dict)
     self:imp_friend_init_from_dict(dict)
 end
 
-function imp_friend.imp_friend_write_to_dict(self, dict)
-    for i, v in pairs(params) do
-        if v.db then
+function imp_friend.imp_friend_write_to_dict(self, dict, to_other_game)
+    if to_other_game then
+        for i, _ in pairs(params) do
             dict[i] = self[i]
+        end
+    else
+        for i, v in pairs(params) do
+            if v.db then
+                dict[i] = self[i]
+            end
         end
     end
 end
 
 function imp_friend.imp_friend_write_to_other_game_dict(self,dict)
-    self:imp_friend_write_to_dict(dict)
+    self:imp_friend_write_to_dict(dict, true)
 end
 
 function imp_friend.imp_friend_write_to_sync_dict(self, dict)
