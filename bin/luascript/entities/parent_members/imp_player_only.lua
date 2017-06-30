@@ -482,7 +482,7 @@ end
 function imp_player_only.get_pos(self)
     local entity_manager = self:get_entity_manager()
     if entity_manager == nil then
-        flog("error", "get_pos: entity_manager is nil")
+        --flog("error", "get_pos: entity_manager is nil")
         return self:get("posX"),self:get("posY"),self:get("posZ")
     end
     local puppet = entity_manager.GetPuppet(self.actor_id)

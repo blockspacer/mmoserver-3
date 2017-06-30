@@ -942,6 +942,7 @@ function team_player.ensure_enter_dungeon(self, input)
         if sure_sign == -1 or sure_sign == team.sure_sign then
             send_to_all_member_client(team.members, const.SC_MESSAGE_LUA_GAME_RPC, {sure_sign = sure_sign, member_id = actor_id, member_name = actor_name, func_name = "TeamMemberReplyEnterDungeon"}, actor_id)
         end
+    else
         if sure_sign == team.sure_sign then
             team.new_target = new_target
         end
@@ -971,14 +972,14 @@ function team_player.ensure_enter_dungeon(self, input)
             local result = _set_target(team_id, team.new_target)
             if result == 0 then
                 _start_team_dungeon(team_id, self.session_id)
+                team.in_dungeon = true
             else
                 send_to_client(self.session_id, const.SC_MESSAGE_LUA_GAME_RPC, {result = result, func_name = "EnterTeamDungeonRet"})
             end
         else
             _start_team_dungeon(team_id, self.session_id)
+            team.in_dungeon = true
         end
-
-        team.in_dungeon = true
     end
 end
 

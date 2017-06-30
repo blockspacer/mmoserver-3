@@ -289,6 +289,9 @@ function imp_aoi.on_mini_map_switch_scene(self, input)
 
     local target_scene_id = input.scene_id
     local scene_cfg = common_scene_config.get_scene_config(target_scene_id)
+    if scene_cfg == nil then
+        return
+    end
     local target_born_pos
     local target_item_id = scene_cfg["Location"..self.country]
     if target_item_id == 0 then
