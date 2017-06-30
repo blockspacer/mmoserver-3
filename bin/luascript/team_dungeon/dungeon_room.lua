@@ -127,6 +127,7 @@ function dungeon_room.init(self)
             flog("error","can not find targets!!!")
         end
     end
+    self:update(_get_now_time_second())
 end
 
 --死亡多少个了？？？

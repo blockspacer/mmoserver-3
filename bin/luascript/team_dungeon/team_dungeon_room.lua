@@ -51,7 +51,11 @@ function team_dungeon_room.__ctor(self,team_info,input)
         table.insert(fight_members,self.team_info.members[i].actor_id)
         table.insert(levels,self.team_info.members[i].level)
     end
+    flog("info","team_dungeon_room team_dungeon_scene_manager.create_team_dungeon_scene")
     self.aoi_scene_id = team_dungeon_scene_manager.create_team_dungeon_scene(team_info.target,scheme.get_monster_level_by_levels(levels))
+    if self.dungeon_config == nil then
+        flog("warn","team_dungeon_room dungeon_config == nil,target == "..self.team_info.target)
+    end
     self.dungeon_room = dungeon_room(self.dungeon_config,self.aoi_scene_id)
     fight_server_center:add_fight(input.fight_id,input.token,input.fight_type,fight_members)
 end

@@ -32,6 +32,7 @@ end
 
 -- 加载所有场景元素
 local function load_scene(sceneID,scene_config,scene_setting,dungeon_id,level)
+    flog("info","team_dungeon_scene_manager|load_scene")
     local aoi_scene_id = const.SCENE_TYPE.TEAM_DUNGEON*100000000 + sceneID*10000 + get_scene_id()
 	local s = team_dungeon_scene()
     s:initialize(aoi_scene_id,scene_config,sceneID,scene_setting,dungeon_id,level)
@@ -61,9 +62,10 @@ local function destroy_scene(scene_id)
 end
 
 local function create_team_dungeon_scene(dungeon_id,level)
+    flog("info","team_dungeon_scene_manager|create_team_dungeon_scene")
     local team_dungeon_config = challenge_team_dungeon_config.get_team_dungeon_config(dungeon_id)
     if team_dungeon_config == nil then
-        flog("tmlDebug","can not find team dungeon scene config!dungeon id:"..dungeon_id)
+        flog("info","can not find team dungeon scene config!dungeon id:"..dungeon_id)
         return 0
     end
 
