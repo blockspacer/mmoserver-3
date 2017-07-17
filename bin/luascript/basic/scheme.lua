@@ -198,31 +198,6 @@ local function get_sequence_index(data_list, key, value)
     return index
 end
 
-
--- 二分法查找索引(降序)
-local function dichotomy_get_index(data_list, key, value)
-    local left = 1;
-    local total_length = #data_list
-    local right = total_length
-    local mid = math_ceil((left + right)/2)
-    while left ~= mid do
-        if mid == total_length then
-            break
-        end
-
-        if data_list[mid][key] <= value and data_list[mid+1][key] > value then
-            break;
-        elseif data_list[mid][key] < value then
-            left = mid + 1
-        else
-            right = mid - 1
-        end
-
-        mid = math_ceil((left + right)/2)
-    end
-    return mid
-end
-
 -- 二分法查找索引(升序)
 local function dichotomy_get_index_ascending(data_list, key, value)
     local left = 1;
@@ -230,13 +205,9 @@ local function dichotomy_get_index_ascending(data_list, key, value)
     local right = total_length
     local mid = math_ceil((left + right)/2)
     while left ~= mid do
-        if mid == total_length then
-            break
-        end
-
-        if data_list[mid][key] >= value and data_list[mid+1][key] < value then
+        if data_list[mid][key] == value then
             break;
-        elseif data_list[mid][key] > value then
+        elseif data_list[mid][key] < value then
             left = mid + 1
         else
             right = mid - 1
@@ -407,7 +378,6 @@ return {
     get_time_from_date_string = get_time_from_date_string,
     get_config_name = get_config_name,
     string_utf8len = string_utf8len,
-    dichotomy_get_index = dichotomy_get_index,
     dichotomy_get_index_ascending = dichotomy_get_index_ascending,
     recreate_scheme_table_with_key = recreate_scheme_table_with_key,
     date_to_day_second = date_to_day_second,

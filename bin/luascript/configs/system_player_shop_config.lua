@@ -11,7 +11,7 @@ local stall_cost = {}
 local function reload()
     local stall_cost_config = system_player_shop.Parameter[6].Para
     stall_cost.item_id = stall_cost_config[1]
-    stall_cost.item_cnt = stall_cost_config[2]
+    stall_cost.count = stall_cost_config[2]
 end
 
 reload()

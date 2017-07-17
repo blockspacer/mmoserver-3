@@ -463,6 +463,12 @@ function item_class.get_max_cnt(self)
     return self.max_cnt
 end
 
+function item_class.pack_part_item(self, count)
+    local data = {}
+    self:write_to_dict(data)
+    data.count = count
+    return data
+end
 --test
 if false then
     flog("syzDebug", "CreateItem Debug**********************")

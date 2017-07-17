@@ -16,7 +16,7 @@ local seal_scheme = require("data/growing_pet").BaoWuUpgrade
 local hp_grow_table = require("data/growing_pet").HpGrow
 local devour_table = require("data/growing_pet").Devour
 local item_scheme = require("data/common_item").Item
-local dichotomy_get_index = require("basic/scheme").dichotomy_get_index
+local get_sequence_index = require("basic/scheme").get_sequence_index
 
 local CAPTURE_CD_TIME = scheme_param[4].Parameter  --抓宠cd时间（s）
 local MAX_NUM_ON_FIGHT = 2          --最大出战宠物数目
@@ -112,8 +112,8 @@ end
 
 local function _get_pet_capture_energy_cost(pet_id)
     local rarity = pet_attrib[pet_id].Rarity
-    local index = dichotomy_get_index(scheme_catch_cost, "RarityLowerDegree", rarity)
-    if index == nil then
+    local index = get_sequence_index(scheme_catch_cost, "RarityLowerDegree", rarity)
+    if index == nil or scheme_catch_cost[index] == nil then
         pet_id = pet_id or "nil"
         flog("error", "_get_pet_capture_energy_cost get index error "..pet_id)
         return
